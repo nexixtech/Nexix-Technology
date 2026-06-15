@@ -32,7 +32,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-brand-primary text-white pt-20 pb-12 border-t border-white/10 relative z-10 reveal-item footer-door">
+    <footer className="bg-brand-primary text-white pt-20 pb-12 border-t border-white/10 relative z-10">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
         {/* Column 1: Info and Tagline */}
         <div className="flex flex-col gap-6">
