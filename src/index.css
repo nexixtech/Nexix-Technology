@@ -1,0 +1,230 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Space Grotesk", sans-serif;
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-brand-cyan: #00C2FF;
+  --color-brand-bg-alt: #F7F7F7;
+  --color-brand-border: #E8E8E8;
+  --color-brand-text-muted: #6B6B6B;
+  --color-brand-primary: #0A0A0A;
+}
+
+/* Base custom styles */
+@layer base {
+  body {
+    background-color: #FFFFFF;
+    color: #0A0A0A;
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.03em;
+  }
+}
+
+/* Animations and Custom Utilities */
+
+/* ECG Sweep Effect */
+@keyframes ecg-sweep {
+  0% {
+    mask-position: 100% 0;
+    -webkit-mask-position: 100% 0;
+  }
+  100% {
+    mask-position: 0% 0;
+    -webkit-mask-position: 0% 0;
+  }
+}
+
+.animate-ecg-sweep {
+  mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 25%, rgba(0,0,0,0) 40%);
+  -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 25%, rgba(0,0,0,0) 40%);
+  mask-size: 250% 100%;
+  -webkit-mask-size: 250% 100%;
+  animation: ecg-sweep 12s linear infinite;
+}
+
+/* Continuous Marquee */
+@keyframes marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 25s linear infinite;
+}
+
+/* Snap Scroll for Mobile Cards */
+.snap-x-mandatory {
+  scroll-snap-type: x mandatory;
+}
+
+.snap-start {
+  scroll-snap-align: start;
+}
+
+/* Hide Scrollbar but keep functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Timeline dash line animation */
+@keyframes dash {
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+
+.animate-dash-line {
+  stroke-dasharray: 6, 6;
+  animation: dash 2s linear infinite;
+}
+
+/* Card hover animation border flash */
+.premium-card {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.premium-card:hover {
+  transform: translateY(-4px);
+  border-color: #00C2FF;
+  box-shadow: 0 10px 30px -10px rgba(0, 194, 255, 0.15);
+}
+
+/* Custom Scrollbar for desktop horizontal scrolling */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #F0F0F0;
+  border-radius: 2px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #0A0A0A;
+  border-radius: 2px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #00C2FF;
+}
+
+/* ==========================================================================
+   3D Scroll-Driven Animation & Parallax Styles
+   ========================================================================== */
+
+/* Hardware acceleration on 3D scenes */
+.reveal-item {
+  will-change: transform, opacity;
+}
+
+/* 3D Fly-In from Depth Z */
+.fly-in-z {
+  opacity: 0;
+  transform: perspective(1000px) translateZ(-200px) translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.fly-in-z.visible {
+  opacity: 1;
+  transform: perspective(1000px) translateZ(0) translateY(0);
+}
+
+/* Stats rotate Y entries */
+.rotate-y-left {
+  opacity: 0;
+  transform: perspective(1000px) rotateY(35deg) translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.rotate-y-left.visible {
+  opacity: 1;
+  transform: perspective(1000px) rotateY(0) translateY(0);
+}
+
+.rotate-y-right {
+  opacity: 0;
+  transform: perspective(1000px) rotateY(-35deg) translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.rotate-y-right.visible {
+  opacity: 1;
+  transform: perspective(1000px) rotateY(0) translateY(0);
+}
+
+/* Timeline step stand up */
+.stand-up {
+  opacity: 0;
+  transform: perspective(1000px) rotateX(90deg);
+  transform-origin: bottom;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.stand-up.visible {
+  opacity: 1;
+  transform: perspective(1000px) rotateX(0);
+}
+
+/* Blog reveal card flip */
+.card-flip-y {
+  opacity: 0;
+  transform: perspective(1000px) rotateY(90deg);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-flip-y.visible {
+  opacity: 1;
+  transform: perspective(1000px) rotateY(0);
+}
+
+/* Consultation Zoom In Scene */
+.zoom-in-scene {
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.zoom-in-scene.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Footer Door Lift */
+.footer-door {
+  opacity: 0;
+  transform: perspective(1000px) rotateX(20deg) translateY(30px);
+  transform-origin: top;
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.footer-door.visible {
+  opacity: 1;
+  transform: perspective(1000px) rotateX(0) translateY(0);
+}
+
+/* 3D tilt tracking utilities */
+.hover-trigger-3d {
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+  transform-style: preserve-3d;
+}
+
+/* Accessibility settings for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-item, .fly-in-z, .rotate-y-left, .rotate-y-right, .stand-up, .card-flip-y, .zoom-in-scene, .footer-door {
+    transform: none !important;
+    transition: opacity 0.3s ease !important;
+    opacity: 1 !important;
+  }
+  .animate-ecg-sweep, .animate-dash-line, .animate-marquee {
+    animation: none !important;
+  }
+}
+
