@@ -110,7 +110,7 @@ export default function Cursor() {
           left: 0;
           width: 36px;
           height: 36px;
-          border: 1.5px solid #00C2FF;
+          border: 1.5px solid #888888;
           border-radius: 50%;
           pointer-events: none;
           z-index: 99;
@@ -121,7 +121,7 @@ export default function Cursor() {
         .cursor-hover .custom-cursor-dot {
           width: 24px;
           height: 24px;
-          background-color: #00C2FF;
+          background-color: #888888;
         }
         .cursor-hover .custom-cursor-ring {
           width: 48px;
@@ -134,7 +134,7 @@ export default function Cursor() {
           width: 2px;
           height: 20px;
           border-radius: 0;
-          background-color: #00C2FF;
+          background-color: #888888;
         }
         .cursor-text .custom-cursor-ring {
           opacity: 0;

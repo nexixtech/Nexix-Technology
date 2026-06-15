@@ -74,7 +74,7 @@ export default function Navbar() {
               navigate("/contact");
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
-            className="text-[#00C2FF] hover:underline cursor-pointer font-bold"
+            className="text-white hover:underline cursor-pointer font-bold"
           >
             [Book Now →]
           </button>
@@ -97,7 +97,7 @@ export default function Navbar() {
         }`}
       >
         {/* Glowing Bottom Line Signature */}
-        <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#00C2FF] to-transparent pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none"></div>
 
         {/* Noise overlay */}
         <div className="absolute inset-0 noise-bg opacity-30 pointer-events-none z-0"></div>
@@ -110,15 +110,15 @@ export default function Navbar() {
             onClick={handleNavClick}
             className="flex items-center gap-2.5 group select-none"
           >
-            {/* White-bg Pill Icon */}
-            <div className="w-[76px] h-9 bg-white rounded-full flex items-center justify-center gap-1.5 px-3">
-              <span className="font-display font-bold text-base text-black leading-none">N</span>
-              <span className="text-black/30 text-xs font-mono">|</span>
+            {/* Black-bg Pill Icon */}
+            <div className="w-[76px] h-9 bg-black border border-white/15 rounded-full flex items-center justify-center gap-1.5 px-3">
+              <span className="font-display font-bold text-base text-white leading-none">N</span>
+              <span className="text-white/25 text-xs font-mono">|</span>
               <svg className="w-8 h-4 flex-none" viewBox="0 0 50 30" fill="none">
                 <path
                   d="M0,15 L15,15 L18,5 L22,25 L25,10 L28,20 L31,13 L34,17 L37,15 L50,15"
-                  stroke="black"
-                  strokeWidth="3"
+                  stroke="white"
+                  strokeWidth="3.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
@@ -131,7 +131,7 @@ export default function Navbar() {
                 <span>Nexix</span>
                 {/* Sup superscript pulsing cyan circle */}
                 <span
-                  className="w-1.5 h-1.5 rounded-full bg-[#00C2FF] ml-0.5"
+                  className="w-1.5 h-1.5 rounded-full bg-current ml-0.5"
                   style={{
                     animation: "pulse-dot 2s ease-in-out infinite",
                     verticalAlign: "super",
@@ -159,7 +159,7 @@ export default function Navbar() {
                             <ChevronDown className="w-2.5 h-2.5 flex-none text-current" />
                             {/* Slide-in underline indicator */}
                             <span
-                              className={`absolute bottom-[-2px] left-1/2 -translate-x-1/2 h-[3px] w-4 bg-[#00C2FF] rounded-[2px] transition-all duration-200 transform origin-left ${
+                              className={`absolute bottom-[-2px] left-1/2 -translate-x-1/2 h-[3px] w-4 bg-white rounded-[2px] transition-all duration-200 transform origin-left ${
                                 isActive
                                   ? "scale-x-100 opacity-100"
                                   : "scale-x-0 opacity-0 group-hover:scale-x-100 group-hover:opacity-100"
@@ -173,13 +173,13 @@ export default function Navbar() {
                       <div className="absolute top-[85%] left-0 w-[280px] bg-[#111111] border border-[#222222] rounded-xl p-5 shadow-[0_20px_60px_rgba(0,0,0,0.5)] opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-[-8px] group-hover:translate-y-0 transition-all duration-200 ease-out z-50 text-left">
                         {/* Section 1: Available Now */}
                         <div className="mb-4">
-                          <h4 className="font-mono text-[10px] text-[#00C2FF] tracking-wider uppercase mb-3">
+                          <h4 className="font-mono text-[10px] text-white tracking-wider uppercase mb-3">
                             AVAILABLE NOW
                           </h4>
                           <Link
                             to="/services"
                             onClick={handleNavClick}
-                            className="group/item flex justify-between items-center text-white hover:text-[#00C2FF] font-display font-semibold text-sm transition-colors"
+                            className="group/item flex justify-between items-center text-white hover:text-white font-display font-semibold text-sm transition-colors"
                           >
                             <span className="flex items-center gap-1.5">
                               <span className="text-xs">⬡</span> Website Design & Dev
@@ -223,7 +223,7 @@ export default function Navbar() {
                           <span>{link.name}</span>
                           {/* Underline indicator */}
                           <span
-                            className={`absolute bottom-[-2px] left-1/2 -translate-x-1/2 h-[3px] w-4 bg-[#00C2FF] rounded-[2px] transition-all duration-200 transform origin-left ${
+                            className={`absolute bottom-[-2px] left-1/2 -translate-x-1/2 h-[3px] w-4 bg-white rounded-[2px] transition-all duration-200 transform origin-left ${
                               isActive
                                 ? "scale-x-100 opacity-100"
                                 : "scale-x-0 opacity-0 group-hover:scale-x-100 group-hover:opacity-100"
@@ -252,7 +252,7 @@ export default function Navbar() {
                 navigate("/contact");
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
-              className="bg-white text-black font-display font-semibold text-sm px-[22px] py-[10px] rounded-lg transition-all duration-200 flex items-center gap-2 hover:bg-[#00C2FF] hover:shadow-[0_0_20px_rgba(0,194,255,0.4)] hover:-translate-y-0.5 cursor-pointer group"
+              className="bg-white text-black font-display font-semibold text-sm px-[22px] py-[10px] rounded-lg transition-all duration-200 flex items-center gap-2 hover:bg-[#E0E0E0] hover:shadow-[0_0_20px_rgba(255,255,255,0.25)] hover:-translate-y-0.5 cursor-pointer group"
             >
               <Activity className="w-4 h-4 text-black group-hover:animate-pulse flex-none" />
               <span>Get a Quote</span>
@@ -310,7 +310,7 @@ export default function Navbar() {
                 onClick={handleNavClick}
                 className={({ isActive }) =>
                   `text-3xl font-display font-bold block animate-stagger ${
-                    isActive ? "text-[#00C2FF]" : "text-white hover:text-[#00C2FF]"
+                    isActive ? "text-white" : "text-white/60 hover:text-white"
                   }`
                 }
                 style={{ animationDelay: `${idx * 60}ms` }}
@@ -327,7 +327,7 @@ export default function Navbar() {
                 navigate("/contact");
                 handleNavClick();
               }}
-              className="bg-white text-black font-display font-bold w-full py-4 rounded-lg text-base transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer hover:bg-[#00C2FF]"
+              className="bg-white text-black font-display font-bold w-full py-4 rounded-lg text-base transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer hover:bg-[#E0E0E0]"
             >
               <Activity className="w-5 h-5 text-black" />
               <span>Get a Quote</span>

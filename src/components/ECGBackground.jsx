@@ -37,7 +37,7 @@ export default function ECGBackground() {
                L 875,50 
                L 1000,50"
             fill="none"
-            stroke="#00C2FF"
+            stroke="#888888"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"

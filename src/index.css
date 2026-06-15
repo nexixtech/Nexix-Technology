@@ -6,7 +6,7 @@
   --font-sans: "Inter", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  --color-brand-cyan: #00C2FF;
+  --color-brand-cyan: #FFFFFF;
   --color-brand-bg-alt: #F7F7F7;
   --color-brand-border: #E8E8E8;
   --color-brand-text-muted: #6B6B6B;
@@ -29,6 +29,11 @@
 }
 
 /* Animations and Custom Utilities */
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.85; }
+}
 
 /* ECG Sweep Effect */
 @keyframes ecg-sweep {
@@ -103,8 +108,8 @@
 
 .premium-card:hover {
   transform: translateY(-4px);
-  border-color: #00C2FF;
-  box-shadow: 0 10px 30px -10px rgba(0, 194, 255, 0.15);
+  border-color: #888888;
+  box-shadow: 0 10px 30px -10px rgba(128, 128, 128, 0.15);
 }
 
 /* Custom Scrollbar for desktop horizontal scrolling */
@@ -120,7 +125,7 @@
   border-radius: 2px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #00C2FF;
+  background: #888888;
 }
 
 /* ==========================================================================

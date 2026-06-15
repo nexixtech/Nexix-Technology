@@ -98,7 +98,7 @@ export default function HeroCube() {
           const mx = (ftl.px + fbr.px) / 2, my = (ftl.py + fbr.py) / 2;
           const gr = ctx.createRadialGradient(mx, my, 0, mx, my, Math.abs(ftr.px - ftl.px) * .9);
           gr.addColorStop(0, `rgba(255,255,255,${(br * .55).toFixed(2)})`);
-          gr.addColorStop(.5, `rgba(200,220,255,${(br * .18).toFixed(2)})`);
+          gr.addColorStop(.5, `rgba(220,220,220,${(br * .18).toFixed(2)})`);
           gr.addColorStop(1, "rgba(0,0,0,0)");
           ctx.beginPath();
           ctx.moveTo(ftl.px, ftl.py);
@@ -114,7 +114,7 @@ export default function HeroCube() {
         const sa = s(i * 23) * .3 + .04, sr = s(i * 29) * 1.1 + .3;
         ctx.beginPath();
         ctx.arc(sx, sy, sr, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(200,210,230,${sa.toFixed(2)})`;
+        ctx.fillStyle = `rgba(220,220,220,${sa.toFixed(2)})`;
         ctx.fill();
       }
 

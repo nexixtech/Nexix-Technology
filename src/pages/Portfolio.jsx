@@ -1,79 +1,118 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ArrowRight, ExternalLink } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { ArrowUpRight, Code, Sparkles, Layout, ShoppingBag, Globe } from "lucide-react";
+import CTABanner from "../components/CTABanner";
 
 export default function Portfolio() {
-  const navigate = useNavigate();
-  const [selectedFilter, setSelectedFilter] = useState("All");
+  const [selectedCat, setSelectedCat] = useState("All");
+  const [animateGrid, setAnimateGrid] = useState(false);
 
-  const categories = ["All", "Business Sites", "Landing Pages", "Portfolios"];
+  useEffect(() => {
+    setAnimateGrid(true);
+    const timer = setTimeout(() => setAnimateGrid(false), 250);
+    return () => clearTimeout(timer);
+  }, [selectedCat]);
+
+  const categories = ["All", "Web Design", "Development", "E-Commerce", "Branding"];
 
   const projects = [
     {
-      name: "Aura Creative Studio",
-      category: "Portfolios",
-      desc: "An immersive photography portfolio website with dynamic masonry grid columns and zero layout shifts.",
-      typeTag: "Creative Portfolio"
+      title: "FinFlow Analytics Dashboard",
+      category: "Development",
+      desc: "A real-time financial tracking dashboard built on custom React components and fast database queries.",
+      icon: Code,
+      accent: "#888888"
     },
     {
-      name: "Apex Logistics",
-      category: "Business Sites",
-      desc: "Custom fleet management web presence with automated request forms and customer tracking integration.",
-      typeTag: "Corporate Website"
+      title: "Aura Creative Studio",
+      category: "Web Design",
+      desc: "A minimal, visual-focused photography catalog website featuring smooth masonry transitions.",
+      icon: Layout,
+      accent: "#8A2BE2"
     },
     {
-      name: "Zenith SaaS",
-      category: "Landing Pages",
-      desc: "One-page marketing layout for an artificial intelligence automated writing tool, optimized for google ads campaigns.",
-      typeTag: "Product Landing Page"
+      title: "FashionHub Headless Store",
+      category: "E-Commerce",
+      desc: "A lightning fast, headless Shopify storefront designed for seamless mobile checkouts.",
+      icon: ShoppingBag,
+      accent: "#00FF66"
     },
     {
-      name: "Novus Properties",
-      category: "Business Sites",
-      desc: "Minimalist Indian real estate search catalog with modular listing filters and direct WhatsApp inquiry buttons.",
-      typeTag: "Property Portal"
+      title: "Velo Brand Experience",
+      category: "Branding",
+      desc: "Comprehensive style systems, typography rules, SVG logo designs, and visual guidelines.",
+      icon: Sparkles,
+      accent: "#FF007F"
     },
     {
-      name: "Karan Johar Portfolio",
-      category: "Portfolios",
-      desc: "Clean typographic portfolio page for a digital product designer, featuring fast image previews and dark/light modes.",
-      typeTag: "Designer Showcase"
+      title: "Novus Property Portal",
+      category: "Development",
+      desc: "Custom database schema search engine for prime estates with direct WhatsApp call pipelines.",
+      icon: Code,
+      accent: "#FFA500"
     },
     {
-      name: "Velo App Campaign",
-      category: "Landing Pages",
-      desc: "A high-conversion landing page featuring SVG animations and responsive mockups for a micro-mobility startup.",
-      typeTag: "App Landing Page"
+      title: "Zenith SaaS Landing Page",
+      category: "Web Design",
+      desc: "Single-page visual marketing layout optimized for high conversions and Google ads.",
+      icon: Layout,
+      accent: "#3300FF"
+    },
+    {
+      title: "Organic Marketplace",
+      category: "E-Commerce",
+      desc: "Tailored shopping catalog integrating stripe checkouts, inventory syncing, and automated receipts.",
+      icon: ShoppingBag,
+      accent: "#FF4500"
+    },
+    {
+      title: "Karan Johar Portfolio",
+      category: "Web Design",
+      desc: "Typographic portfolios designed for a digital creator, passing all core web vitals.",
+      icon: Layout,
+      accent: "#CCCCCC"
+    },
+    {
+      title: "LogiCorp Corporate Hub",
+      category: "Branding",
+      desc: "Modern digital guidelines, email templates, presentation layouts, and unified brand books.",
+      icon: Sparkles,
+      accent: "#7FFF00"
     }
   ];
 
-  const filteredProjects = selectedFilter === "All"
+  const filteredProjects = selectedCat === "All"
     ? projects
-    : projects.filter(p => p.category === selectedFilter);
+    : projects.filter(p => p.category === selectedCat);
 
   return (
-    <div className="bg-white">
+    <div className="bg-[#FFFFFF] text-[#0A0A0A] font-sans">
+      
       {/* HERO */}
-      <section className="py-20 border-b border-brand-border bg-white text-left">
-        <div className="max-w-7xl mx-auto px-6">
-          <span className="font-mono text-xs uppercase tracking-widest text-brand-cyan block mb-3">PORTFOLIO</span>
-          <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl text-brand-primary leading-tight tracking-tight max-w-2xl">
-            Our Work, Your Proof.
+      <section className="bg-white py-[100px] text-left border-b border-[#E8E8E8]">
+        <div className="max-w-[1200px] mx-auto px-6">
+          <span className="section-eyebrow text-[#888888] font-mono text-xs uppercase tracking-widest block mb-4">
+            OUR WORK
+          </span>
+          <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl text-[#0A0A0A] leading-tight tracking-tight max-w-3xl fade-up">
+            Projects We're Proud Of
           </h1>
+          <p className="text-[#666666] text-base sm:text-lg mt-6 max-w-xl leading-relaxed fade-up">
+            Explore our curated work across various sectors, demonstrating software engineering standards and high-end editorial designs.
+          </p>
         </div>
       </section>
 
       {/* FILTER TABS */}
-      <section className="py-8 bg-brand-bg-alt border-b border-brand-border sticky top-[80px] z-30">
-        <div className="max-w-7xl mx-auto px-6 flex flex-wrap gap-3 items-center">
+      <section className="py-6 bg-[#F5F5F5] border-b border-[#E8E8E8] sticky top-[72px] z-30 select-none">
+        <div className="max-w-[1200px] mx-auto px-6 flex flex-wrap gap-2 items-center">
           {categories.map((cat) => (
             <button
               key={cat}
-              onClick={() => setSelectedFilter(cat)}
-              className={`px-5 py-2.5 rounded-full font-mono text-xs uppercase tracking-wider transition-all cursor-pointer ${
-                selectedFilter === cat
-                  ? "bg-brand-primary text-white shadow-sm font-bold"
-                  : "bg-white text-brand-primary border border-brand-border hover:border-brand-cyan hover:text-brand-cyan"
+              onClick={() => setSelectedCat(cat)}
+              className={`px-5 py-2.5 rounded-full font-mono text-xs uppercase tracking-wider transition-all duration-200 cursor-pointer border ${
+                selectedCat === cat
+                  ? "bg-[#0A0A0A] text-white border-[#0A0A0A] shadow-sm font-bold"
+                  : "bg-white text-gray-600 border-[#EBEBEB] hover:border-[#0A0A0A] hover:text-[#0A0A0A]"
               }`}
             >
               {cat}
@@ -82,86 +121,62 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* MASONRY / EDITORIAL GRID */}
-      <section className="py-24 bg-white border-b border-brand-border">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {/* PORTFOLIO GRID */}
+      <section className="py-[100px] bg-white border-b border-[#E8E8E8]">
+        <div className="max-w-[1200px] mx-auto px-6">
+          <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-300 ${animateGrid ? "opacity-30 translate-y-2" : "opacity-100 translate-y-0"}`}>
             {filteredProjects.map((proj, idx) => (
-              <div key={idx} className="bg-white border border-brand-border rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between premium-card group h-full">
+              <div
+                key={idx}
+                className="bg-white border border-[#EBEBEB] rounded-[16px] overflow-hidden shadow-sm flex flex-col justify-between h-full transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] group fade-up relative"
+              >
                 {/* Visual Area with Grid & Gradient */}
-                <div className="h-[220px] bg-brand-bg-alt relative flex items-center justify-center p-6 overflow-hidden">
-                  <div className="absolute inset-0 bg-[linear-gradient(to_right,#e8e8e8_1px,transparent_1px),linear-gradient(to_bottom,#e8e8e8_1px,transparent_1px)] bg-[size:20px_20px] opacity-40"></div>
+                <div className="h-[220px] bg-[#0A0A0A] relative flex items-center justify-center p-6 overflow-hidden border-b border-[#EBEBEB]">
+                  {/* Tech grid background pattern */}
+                  <div className="absolute inset-0 bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)] bg-[size:20px_20px] opacity-15"></div>
                   
-                  {/* Decorative Project Mockup Card */}
-                  <div className="w-11/12 h-[80%] bg-white rounded-xl border border-brand-border shadow-md p-4 flex flex-col justify-between transform group-hover:-translate-y-2 group-hover:rotate-1 transition-all duration-300">
-                    <div className="flex justify-between items-center pb-2 border-b border-brand-border">
-                      <span className="font-mono text-[9px] uppercase tracking-wider text-brand-text-muted">{proj.typeTag}</span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-brand-cyan"></span>
-                    </div>
-                    <div className="h-12 flex flex-col justify-center">
-                      <div className="w-2/3 h-2.5 bg-brand-primary rounded mb-1.5"></div>
-                      <div className="w-full h-1.5 bg-brand-bg-alt rounded"></div>
-                    </div>
-                    <div className="flex justify-between items-center pt-2">
-                      <div className="w-1/3 h-2 bg-brand-bg-alt rounded"></div>
-                      <div className="w-4 h-4 rounded-full bg-brand-cyan/20 flex items-center justify-center">
-                        <span className="w-1.5 h-1.5 rounded-full bg-brand-cyan"></span>
-                      </div>
-                    </div>
+                  {/* Glowing light ball */}
+                  <div className="absolute w-24 h-24 rounded-full blur-3xl opacity-10 group-hover:opacity-25 transition-opacity" style={{ backgroundColor: proj.accent }}></div>
+
+                  {/* Icon Representation */}
+                  <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white relative z-10 group-hover:scale-110 group-hover:border-white transition-all">
+                    <proj.icon className="w-6 h-6 text-white/50 group-hover:text-white" />
                   </div>
 
-                  {/* Dark hover overlay */}
-                  <div className="absolute inset-0 bg-brand-primary/95 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none md:pointer-events-auto">
-                    <div className="flex items-center gap-2 text-white font-display font-bold text-sm tracking-wider uppercase border border-white/20 px-6 py-3 rounded-full hover:bg-brand-cyan hover:text-brand-primary transition-all pointer-events-none">
-                      View Project <ExternalLink className="w-4 h-4" />
+                  {/* Accent bottom line */}
+                  <div className="absolute bottom-0 left-0 right-0 h-[3px]" style={{ backgroundColor: proj.accent }}></div>
+
+                  {/* Hover Overlay */}
+                  <div className="absolute inset-0 bg-[#0A0A0A]/95 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-20">
+                    <div className="text-white text-xs font-mono font-bold tracking-widest flex items-center gap-2">
+                      VIEW CASE STUDY <ArrowUpRight className="w-4 h-4 text-white" />
                     </div>
                   </div>
                 </div>
 
-                {/* Text Content */}
-                <div className="p-6 text-left flex flex-col justify-between flex-grow">
+                {/* Card Body */}
+                <div className="p-6 flex flex-col justify-between flex-grow text-left">
                   <div>
-                    <span className="px-2.5 py-0.5 rounded-full bg-brand-bg-alt text-brand-primary border border-brand-border text-[9px] font-mono mb-3 inline-block">
+                    <span className="inline-block px-3 py-1 rounded-full bg-[#F5F5F5] border border-[#EBEBEB] text-[10px] font-mono uppercase tracking-wider text-gray-600 mb-3">
                       {proj.category}
                     </span>
-                    <h3 className="font-display font-bold text-xl text-brand-primary mb-2">{proj.name}</h3>
-                    <p className="text-brand-text-muted text-xs leading-relaxed font-sans">{proj.desc}</p>
+                    <h3 className="font-display font-bold text-lg text-[#0A0A0A] leading-tight mb-2 group-hover:text-[#0A0A0A] transition-colors">
+                      {proj.title}
+                    </h3>
+                    <p className="text-[#666666] text-xs leading-relaxed">
+                      {proj.desc}
+                    </p>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-
-          {/* Empty State / Coming Soon */}
-          <div className="mt-16 border border-dashed border-brand-border rounded-2xl p-10 bg-brand-bg-alt/30 text-center">
-            <span className="font-mono text-xs uppercase tracking-widest text-brand-text-muted block mb-2">NEXT PIPELINE</span>
-            <p className="font-display font-bold text-lg text-brand-primary">
-              More projects launching soon. We're actively deploying.
-            </p>
-          </div>
         </div>
       </section>
 
-      {/* CTA SECTION */}
-      <section className="py-24 bg-brand-bg-alt">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="font-display font-bold text-3xl sm:text-4xl text-brand-primary mb-4 tracking-tight">
-            Want your site here?
-          </h2>
-          <p className="text-brand-text-muted text-base max-w-lg mx-auto mb-8 leading-relaxed">
-            Let's build a fast, SEO-optimized, and premium website designed specifically to hit your growth objectives.
-          </p>
-          <button
-            onClick={() => {
-              navigate("/contact");
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-            className="bg-brand-primary text-white hover:bg-brand-cyan hover:text-brand-primary font-display font-bold px-8 py-4 rounded-full text-base transition-all duration-300 inline-flex items-center gap-2 cursor-pointer"
-          >
-            Let's Talk <ArrowRight className="w-5 h-5" />
-          </button>
-        </div>
-      </section>
+      {/* CTA BANNER */}
+      <CTABanner />
+
     </div>
   );
 }

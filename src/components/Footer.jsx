@@ -38,19 +38,19 @@ export default function Footer() {
         <div className="flex flex-col gap-6">
           <Link to="/" onClick={handleLinkClick} className="font-display font-bold text-2xl tracking-tight flex items-center gap-2">
             <span>NEXIX</span>
-            <span className="w-1.5 h-6 bg-brand-cyan inline-block"></span>
+            <span className="w-1.5 h-6 bg-white inline-block"></span>
           </Link>
           <p className="text-white/60 text-sm max-w-xs font-sans leading-relaxed">
-            Building Your Digital Future. We craft ultra-fast, responsive, and SEO-friendly websites tailored for modern brands.
+            Building Your Digital Future — One Website at a Time.
           </p>
           <div className="flex gap-4 items-center">
-            <a href="https://github.com" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:border-brand-cyan hover:text-brand-cyan transition-colors" aria-label="Github">
+            <a href="https://github.com" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:border-white hover:text-white transition-colors" aria-label="Github">
               <GithubIcon />
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:border-brand-cyan hover:text-brand-cyan transition-colors" aria-label="LinkedIn">
+            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:border-white hover:text-white transition-colors" aria-label="LinkedIn">
               <LinkedinIcon />
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:border-brand-cyan hover:text-brand-cyan transition-colors" aria-label="Twitter">
+            <a href="https://twitter.com" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:border-white hover:text-white transition-colors" aria-label="Twitter">
               <TwitterIcon />
             </a>
           </div>
@@ -58,8 +58,8 @@ export default function Footer() {
 
         {/* Column 2: Quick Links */}
         <div>
-          <h4 className="font-mono text-xs uppercase tracking-widest text-brand-cyan mb-6">Quick Links</h4>
-          <ul className="flex flex-col gap-3">
+          <h4 className="font-mono text-xs uppercase tracking-widest text-white mb-6">Quick Links</h4>
+          <ul className="flex flex-col gap-1">
             {[
               { name: "Home", path: "/" },
               { name: "About Us", path: "/about" },
@@ -68,7 +68,7 @@ export default function Footer() {
               { name: "Blog", path: "/blog" },
             ].map((link) => (
               <li key={link.name}>
-                <Link to={link.path} onClick={handleLinkClick} className="text-white/60 hover:text-brand-cyan text-sm transition-colors">
+                <Link to={link.path} onClick={handleLinkClick} className="text-white/60 hover:text-white text-sm transition-colors py-2 block">
                   {link.name}
                 </Link>
               </li>
@@ -78,28 +78,28 @@ export default function Footer() {
 
         {/* Column 3: Services */}
         <div>
-          <h4 className="font-mono text-xs uppercase tracking-widest text-brand-cyan mb-6">Services</h4>
+          <h4 className="font-mono text-xs uppercase tracking-widest text-white mb-6">Services</h4>
           <ul className="flex flex-col gap-3 text-white/60 text-sm">
-            <li>Website Design & Dev</li>
-            <li>Landing Pages</li>
-            <li>CMS Integration</li>
-            <li>SEO Optimization</li>
+            <li className="py-1">Website Design & Dev</li>
+            <li className="py-1">Landing Pages</li>
+            <li className="py-1">CMS Integration</li>
+            <li className="py-1">SEO Optimization</li>
           </ul>
         </div>
 
         {/* Column 4: Contact */}
-        <div className="flex flex-col gap-4">
-          <h4 className="font-mono text-xs uppercase tracking-widest text-brand-cyan mb-6">Contact</h4>
-          <div className="flex items-center gap-3 text-sm text-white/60 hover:text-brand-cyan transition-colors">
-            <Mail className="w-4 h-4 text-brand-cyan" />
-            <a href="mailto:nexixtech@gmail.com">nexixtech@gmail.com</a>
+        <div className="flex flex-col gap-2">
+          <h4 className="font-mono text-xs uppercase tracking-widest text-white mb-6">Contact</h4>
+          <div className="flex items-center gap-3 text-sm text-white/60 hover:text-white transition-colors py-2">
+            <Mail className="w-4 h-4 text-white flex-shrink-0" />
+            <a href="mailto:nexixtech@gmail.com" className="block py-1">nexixtech@gmail.com</a>
           </div>
-          <div className="flex items-center gap-3 text-sm text-white/60 hover:text-brand-cyan transition-colors">
-            <Globe className="w-4 h-4 text-brand-cyan" />
-            <a href="https://www.nexixtechnology.in" target="_blank" rel="noreferrer">www.nexixtechnology.in</a>
+          <div className="flex items-center gap-3 text-sm text-white/60 hover:text-white transition-colors py-2">
+            <Globe className="w-4 h-4 text-white flex-shrink-0" />
+            <a href="https://www.nexixtechnology.in" target="_blank" rel="noreferrer" className="block py-1">www.nexixtechnology.in</a>
           </div>
-          <div className="flex items-center gap-3 text-sm text-white/60">
-            <MapPin className="w-4 h-4 text-brand-cyan" />
+          <div className="flex items-center gap-3 text-sm text-white/60 py-2">
+            <MapPin className="w-4 h-4 text-white flex-shrink-0" />
             <span>India</span>
           </div>
         </div>
@@ -116,13 +116,13 @@ export default function Footer() {
           <svg className="w-12 h-6" viewBox="0 0 100 40" fill="none">
             <path
               d="M0,20 L35,20 L40,10 L45,30 L50,5 L55,35 L60,18 L65,22 L70,20 L100,20"
-              stroke="#00C2FF"
+              stroke="#888888"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
           </svg>
-          <span className="text-[10px] tracking-widest text-brand-cyan">NEXIX PULSE</span>
+          <span className="text-[10px] tracking-widest text-white">NEXIX PULSE</span>
         </div>
 
         <div>

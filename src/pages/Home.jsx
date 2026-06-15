@@ -173,7 +173,7 @@ export default function Home() {
         .hero-headline {
           font-family: var(--font-display);
           font-weight: 800;
-          font-size: clamp(52px, 5.5vw, 78px);
+          font-size: clamp(36px, 5.5vw, 78px);
           color: #FFFFFF;
           letter-spacing: -0.02em;
           line-height: 1.05;
@@ -237,7 +237,7 @@ export default function Home() {
         .section-title {
           font-family: var(--font-display);
           font-weight: 700;
-          font-size: 44px;
+          font-size: clamp(30px, 4.5vw, 44px);
           color: #0A0A0A;
           text-align: center;
           margin-bottom: 16px;
@@ -331,13 +331,13 @@ export default function Home() {
             </p>
 
             {/* Buttons Row */}
-            <div className="flex flex-wrap gap-4 items-center mb-8">
+            <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center w-full sm:w-auto mb-8">
               <button
                 onClick={() => {
                   navigate("/contact");
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
-                className="bg-[#0A0A0A] text-white hover:bg-[#1a1a1a] font-display font-semibold text-[15px] px-8 py-4 rounded-[10px] transition-all duration-200 flex items-center gap-2 cursor-pointer shadow-sm hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,0,0,0.25)] active:scale-95"
+                className="bg-[#0A0A0A] text-white hover:bg-[#1a1a1a] font-display font-semibold text-[15px] px-8 py-4 rounded-[10px] transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,0,0,0.25)] active:scale-95 w-full sm:w-auto"
               >
                 <span>Let's Work Together</span>
                 <ArrowUpRight className="w-4 h-4 flex-none" />
@@ -348,7 +348,7 @@ export default function Home() {
                   navigate("/portfolio");
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
-                className="bg-transparent text-[#FFFFFF] hover:text-[#E0E0E0] font-display font-semibold px-6 py-4 text-[15px] transition-colors flex items-center gap-1.5 cursor-pointer group"
+                className="bg-transparent text-[#FFFFFF] hover:text-[#E0E0E0] font-display font-semibold px-6 py-4 text-[15px] transition-colors flex items-center justify-center gap-1.5 cursor-pointer group w-full sm:w-auto"
               >
                 <span>Explore Our Work</span>
                 <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform flex-none" />
@@ -362,10 +362,10 @@ export default function Home() {
                 <span>3 slots open for July 2026</span>
               </span>
               <span className="inline-flex items-center gap-1.5 px-4 py-2 bg-white/80 border border-[#E0E0E0] rounded-full text-xs font-sans text-[#555] font-medium shadow-sm">
-                <span className="text-[#00C2FF] font-bold">✓</span> Free Consultation
+                <span className="text-[#0A0A0A] font-bold">✓</span> Free Consultation
               </span>
               <span className="inline-flex items-center gap-1.5 px-4 py-2 bg-white/80 border border-[#E0E0E0] rounded-full text-xs font-sans text-[#555] font-medium shadow-sm">
-                <span className="text-[#00C2FF] font-bold">✓</span> No Hidden Fees
+                <span className="text-[#0A0A0A] font-bold">✓</span> No Hidden Fees
               </span>
             </div>
 
@@ -448,7 +448,7 @@ export default function Home() {
               ABOUT US
             </span>
             
-            <h2 className="font-display font-bold text-[44px] text-[#0A0A0A] leading-[1.15] mb-6">
+            <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-[44px] text-[#0A0A0A] leading-[1.15] mb-6">
               We're More Than<br />
               Just a Web Agency.
             </h2>
@@ -498,7 +498,7 @@ export default function Home() {
                 <div className="w-20 h-20 bg-[#0A0A0A] rounded-2xl flex items-center justify-center text-white shadow-lg">
                   <span className="font-display font-bold text-3xl">N</span>
                   <span className="text-white/20 mx-1 text-2xl">|</span>
-                  <Activity className="w-8 h-8 text-[#00C2FF]" />
+                  <Activity className="w-8 h-8 text-white" />
                 </div>
                 <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#666] mt-2">
                   nexixtechnology.in
@@ -507,14 +507,14 @@ export default function Home() {
             </div>
 
             {/* Floating stat card */}
-            <div className="absolute bottom-[-24px] left-[-24px] bg-white rounded-[16px] p-5 border border-[#EBEBEB] shadow-[0_12px_40px_rgba(0,0,0,0.12)] flex items-center gap-4 text-left select-none z-20 hover:-translate-y-1 transition-transform">
+            <div className="absolute bottom-[-12px] sm:bottom-[-24px] left-2 sm:left-[-24px] bg-white rounded-[16px] p-5 border border-[#EBEBEB] shadow-[0_12px_40px_rgba(0,0,0,0.12)] flex items-center gap-4 text-left select-none z-20 hover:-translate-y-1 transition-transform">
               <div className="w-10 h-10 rounded-lg bg-[#F5F5F5] flex items-center justify-center text-black">
                 <Users2 className="w-5 h-5" />
               </div>
               <div className="flex flex-col leading-none">
-                <span className="font-display font-bold text-[32px] text-black">20+</span>
-                <span className="font-sans text-[13px] text-[#666] mt-1.5 font-medium">Happy Clients</span>
-                <span className="font-sans text-[11px] text-[#999] mt-0.5">Worldwide</span>
+                <span className="font-display font-bold text-[32px] text-black">2026</span>
+                <span className="font-sans text-[13px] text-[#666] mt-1.5 font-medium">Founded</span>
+                <span className="font-sans text-[11px] text-[#999] mt-0.5">India</span>
               </div>
             </div>
           </div>
@@ -545,8 +545,8 @@ export default function Home() {
             </button>
 
             {/* Testimonial Card */}
-            <div className="bg-white border border-[#EBEBEB] rounded-[20px] p-[52px] shadow-[0_4px_32px_rgba(0,0,0,0.06)] text-left relative overflow-hidden flex-grow testimonial-fade min-h-[300px] flex flex-col justify-between">
-              <span className="absolute top-[32px] left-[40px] font-display font-bold text-[96px] text-[#F0F0F0] leading-[0.8] select-none z-0">
+            <div className="bg-white border border-[#EBEBEB] rounded-[20px] p-6 sm:p-[52px] shadow-[0_4px_32px_rgba(0,0,0,0.06)] text-left relative overflow-hidden flex-grow testimonial-fade min-h-[300px] flex flex-col justify-between">
+              <span className="absolute top-4 sm:top-[32px] left-4 sm:left-[40px] font-display font-bold text-7xl sm:text-[96px] text-[#F0F0F0] leading-[0.8] select-none z-0">
                 “
               </span>
 
@@ -631,7 +631,7 @@ export default function Home() {
             <path
               d="M-1000,50 L-700,50 L-680,30 L-660,70 L-640,10 L-620,90 L-600,45 L-580,55 L-560,50 L0,50 L300,50 L320,30 L340,70 L360,10 L380,90 L400,45 L420,55 L440,50 L1000,50"
               fill="none"
-              stroke="#00C2FF"
+              stroke="#888888"
               strokeWidth="1.5"
               className="animate-ecg-line"
             />
@@ -640,7 +640,7 @@ export default function Home() {
 
         <div className="max-w-[1200px] mx-auto px-6 relative z-10 flex flex-col items-center">
           
-          <h2 className="font-display font-bold text-[52px] leading-[1.1] text-white max-w-[600px] fade-up">
+          <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-[52px] leading-[1.1] text-white max-w-[600px] fade-up">
             Ready to Build Your<br />
             Digital Future?
           </h2>
@@ -649,13 +649,13 @@ export default function Home() {
             Get a free consultation — no commitment, no pressure. We'll get back to you within 24 hours.
           </p>
 
-          <div className="flex flex-wrap gap-4 items-center justify-center mt-10 fade-up">
+          <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center w-full sm:w-auto justify-center mt-10 fade-up">
             <button
               onClick={() => {
                 navigate("/contact");
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
-              className="bg-white hover:bg-[#F0F0F0] text-[#0A0A0A] font-display font-semibold text-[15px] px-8 py-4 rounded-[8px] transition-all duration-200 shadow-lg hover:-translate-y-0.5 cursor-pointer"
+              className="bg-white hover:bg-[#F0F0F0] text-[#0A0A0A] font-display font-semibold text-[15px] px-8 py-4 rounded-[8px] transition-all duration-200 shadow-lg hover:-translate-y-0.5 cursor-pointer w-full sm:w-auto"
             >
               Book Free Consultation
             </button>
@@ -665,7 +665,7 @@ export default function Home() {
                 navigate("/portfolio");
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
-              className="bg-transparent hover:border-[#666] text-[#666] hover:text-[#999] border border-[#333] font-display font-semibold text-[15px] px-8 py-4 rounded-[8px] transition-all duration-200 cursor-pointer"
+              className="bg-transparent hover:border-[#666] text-[#666] hover:text-[#999] border border-[#333] font-display font-semibold text-[15px] px-8 py-4 rounded-[8px] transition-all duration-200 cursor-pointer w-full sm:w-auto"
             >
               View Our Work
             </button>

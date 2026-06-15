@@ -1,30 +1,28 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { ArrowRight, Compass, Eye, ShieldCheck, Zap, Heart, Users } from "lucide-react";
+import { Lightbulb, ShieldCheck, Users, Activity } from "lucide-react";
+import CTABanner from "../components/CTABanner";
 
 export default function About() {
-  const navigate = useNavigate();
-
   const values = [
     {
-      title: "Radical Transparency",
-      desc: "No fine print, no unexpected developer costs, no delays without explanations.",
-      icon: Eye
+      title: "Client-First Approach",
+      desc: "Your goals are our absolute priority. We customize every design and development decision around your business needs.",
+      icon: Users
     },
     {
-      title: "Speed Obsession",
-      desc: "Every millisecond counts. We audit and trim assets to deliver blazing fast web pages.",
-      icon: Zap
+      title: "Modern & Clean Designs",
+      desc: "We craft professional, responsive, and mobile-friendly layouts tailored to your unique brand identity.",
+      icon: Lightbulb
     },
     {
-      title: "Customer-First Partnerships",
-      desc: "We prioritize your feedback, aligning layouts exactly with your strategic vision.",
-      icon: Heart
-    },
-    {
-      title: "Quality Infrastructure",
-      desc: "Deploying on premium networks ensuring secure protocols and high uptime stability.",
+      title: "Affordable Quality",
+      desc: "We deliver custom-engineered website structures at budget-friendly rates with zero compromises.",
       icon: ShieldCheck
+    },
+    {
+      title: "Dedicated Support",
+      desc: "Our commitment doesn't end at launch; we provide ongoing post-delivery support and maintenance.",
+      icon: Activity
     }
   ];
 
@@ -32,182 +30,199 @@ export default function About() {
     {
       name: "Kabir Verma",
       role: "Lead Developer & Founder",
+      bio: "Focused on crafting clean React architectures, responsive layouts, and modern web applications.",
       initials: "KV"
     },
     {
       name: "Ananya Roy",
-      role: "Lead Designer",
+      role: "Lead UI/UX Designer",
+      bio: "Crafting modern design systems, fluid layouts, and visual experiences that convert users.",
       initials: "AR"
     },
     {
       name: "Dev Patel",
       role: "Full Stack Engineer",
+      bio: "Specialist in API setups, server optimizations, and headless CMS integrations.",
       initials: "DP"
     }
   ];
 
   return (
-    <div className="bg-white">
+    <div className="bg-[#FFFFFF] text-[#0A0A0A] font-sans">
+      
       {/* HERO SECTION */}
-      <section className="py-20 border-b border-brand-border bg-white">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-8 text-left">
-            <span className="font-mono text-xs uppercase tracking-widest text-brand-cyan block mb-3">WHO WE ARE</span>
-            <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl text-brand-primary leading-tight tracking-tight max-w-2xl">
-              We're a small team with a big mission: your growth.
-            </h1>
-          </div>
-          <div className="lg:col-span-4 flex justify-center lg:justify-end">
-            {/* Decorative Nexix Large Logo */}
-            <div className="w-48 h-48 rounded-full border border-brand-border flex items-center justify-center bg-brand-bg-alt shadow-inner relative overflow-hidden group">
-              <div className="absolute inset-0 bg-brand-cyan/5 transform scale-0 group-hover:scale-100 transition-transform duration-500 rounded-full"></div>
-              <svg className="w-24 h-12 relative z-10" viewBox="0 0 100 40" fill="none">
-                <path
-                  d="M0,20 L35,20 L40,10 L45,30 L50,5 L55,35 L60,18 L65,22 L70,20 L100,20"
-                  stroke="#0A0A0A"
-                  strokeWidth="3.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-          </div>
+      <section className="bg-[#0A0A0A] text-white py-[100px] text-left">
+        <div className="max-w-[1200px] mx-auto px-6">
+          <span className="section-eyebrow text-white font-mono text-xs uppercase tracking-widest block mb-4">
+            ABOUT NEXIX TECHNOLOGY
+          </span>
+          <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl text-white leading-tight tracking-tight max-w-3xl fade-up">
+            Building Digital Experiences That Last
+          </h1>
+          <p className="text-[#888888] text-base sm:text-lg mt-6 max-w-xl leading-relaxed fade-up">
+            Our mission is to provide high-quality, client-focused technology services that are accessible, scalable, and results-driven, exceeding expectations through creativity, technical expertise, and dedicated support.
+          </p>
         </div>
       </section>
 
       {/* STORY SECTION */}
-      <section className="py-24 border-b border-brand-border bg-white">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          <div className="lg:col-span-7 text-left font-sans">
-            <h2 className="font-display font-bold text-3xl text-brand-primary mb-6">Our Story</h2>
-            <p className="text-brand-text-muted text-base leading-relaxed mb-6">
-              Founded in 2026 in India, Nexix Technology emerged from a simple realization: small and medium businesses often pay exorbitant prices for bloated, slow-loading templates, or get left in the dark by freelancers.
+      <section className="py-[100px] bg-white border-b border-[#E8E8E8]">
+        <div className="max-w-[1200px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="text-left fade-up">
+            <span className="section-eyebrow text-[#888888] font-mono text-xs uppercase tracking-widest block mb-3">
+              OUR JOURNEY
+            </span>
+            <h2 className="section-title text-[#0A0A0A] text-3xl font-display font-bold mb-6">Our Story</h2>
+            <p className="text-[#666666] text-base leading-relaxed mb-6">
+              Founded in 2026, Nexix Technology was established to bridge the gap between great ideas and great websites. We are a newly founded, service-based company currently specializing in professional website development and design. We help businesses create their online presence from the ground up, ensuring every project is fast, responsive, and client-focused.
             </p>
-            <p className="text-brand-text-muted text-base leading-relaxed">
-              We set out to create an agency that combines raw software engineering standards with high-end editorial design aesthetics. By using modern tools like Vite, React, and Tailwind, we create websites that don't just sit online, but act as high-speed funnels for revenue growth.
+            <p className="text-[#666666] text-base leading-relaxed font-semibold mb-2">Our Vision</p>
+            <p className="text-[#666666] text-base leading-relaxed">
+              To become a trusted and innovative technology partner for businesses across India and beyond, delivering cutting-edge digital solutions that drive growth and success.
             </p>
           </div>
-          <div className="lg:col-span-5 flex justify-center lg:justify-end">
-            <div className="bg-brand-primary text-white p-10 rounded-2xl text-left shadow-xl max-w-sm w-full relative overflow-hidden">
-              <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-brand-cyan/10 rounded-full"></div>
-              <div className="font-mono text-xs uppercase tracking-widest text-brand-cyan mb-8">FOUNDATION YEAR</div>
-              <div className="font-display font-bold text-8xl text-white leading-none mb-4">2026</div>
-              <div className="font-mono text-xs uppercase tracking-wider text-white/60">Established in India ✦ Active Globally</div>
+          <div className="flex justify-center lg:justify-end fade-up">
+            {/* Visual Image Placeholder */}
+            <div className="w-full aspect-[4/3] max-w-md rounded-[20px] bg-gradient-to-br from-[#E5E5E5] to-[#D8D8D8] border border-[#EBEBEB] shadow-sm relative overflow-hidden flex items-center justify-center select-none">
+              <div className="absolute inset-0 bg-[linear-gradient(to_right,#ccc_1px,transparent_1px),linear-gradient(to_bottom,#ccc_1px,transparent_1px)] bg-[size:32px_32px] opacity-25"></div>
+              <div className="relative z-10 flex flex-col items-center gap-3">
+                <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#666]">
+                  NEXIX HQ · INDIA
+                </span>
+                <span className="font-display font-bold text-4xl text-[#0A0A0A]">EST. 2026</span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* MISSION & VISION */}
-      <section className="py-24 bg-brand-bg-alt border-b border-brand-border">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Mission */}
-          <div className="bg-white border border-brand-border rounded-2xl p-8 shadow-sm text-left flex flex-col justify-between premium-card h-[280px]">
-            <div>
-              <div className="w-12 h-12 rounded-xl bg-brand-cyan/10 flex items-center justify-center text-brand-cyan mb-6">
-                <Compass className="w-6 h-6" />
-              </div>
-              <h3 className="font-display font-bold text-2xl text-brand-primary mb-3">Our Mission</h3>
-              <p className="text-brand-text-muted text-sm leading-relaxed">
-                To democratize high-end custom web engineering. We aim to give small businesses and creators the exact same performance, SEO, and visual excellence that fortune 500 companies deploy.
-              </p>
-            </div>
+      {/* LEADERSHIP SECTION */}
+      <section className="py-[100px] bg-white border-b border-[#E8E8E8]">
+        <div className="max-w-[1200px] mx-auto px-6">
+          <div className="text-center mb-12">
+            <span className="section-eyebrow text-[#888888] font-mono text-xs uppercase tracking-widest block mb-3">
+              OUR LEADERSHIP
+            </span>
+            <h2 className="section-title text-[#0A0A0A] text-3xl sm:text-4xl font-display font-bold">
+              The People Behind Nexix Technology
+            </h2>
           </div>
 
-          {/* Vision */}
-          <div className="bg-white border border-brand-border rounded-2xl p-8 shadow-sm text-left flex flex-col justify-between premium-card h-[280px]">
-            <div>
-              <div className="w-12 h-12 rounded-xl bg-brand-primary/10 flex items-center justify-center text-brand-primary mb-6">
-                <Users className="w-6 h-6" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-3xl mx-auto">
+            {/* Card 1 — Founder & CEO */}
+            <div className="bg-[#F5F5F5] border border-[#EBEBEB] rounded-[16px] p-8 shadow-sm flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] group fade-up">
+              {/* Initials Avatar */}
+              <div className="w-20 h-20 rounded-full bg-[#0A0A0A] text-white font-display font-bold text-2xl flex items-center justify-center mb-6 shadow group-hover:bg-[#E0E0E0] group-hover:text-black transition-colors select-none">
+                AG
               </div>
-              <h3 className="font-display font-bold text-2xl text-brand-primary mb-3">Our Vision</h3>
-              <p className="text-brand-text-muted text-sm leading-relaxed">
-                To become the most trusted name in web services for emerging Indian brands. We measure our success solely through the digital traffic and conversion rates our clients experience.
+              <h4 className="font-display font-bold text-xl text-[#0A0A0A] mb-1">Aditya Gupta</h4>
+              <p className="font-mono text-xs text-[#0A0A0A] uppercase tracking-widest mb-4 font-semibold">Founder & CEO</p>
+              <p className="text-[#666666] text-xs leading-relaxed max-w-xs">
+                Aditya is the driving force behind Nexix Technology, with a passion for building clean, modern digital experiences. He founded Nexix Technology in 2026 with a vision to make high-quality web development accessible to businesses across India and beyond.
+              </p>
+            </div>
+
+            {/* Card 2 — Co-Founder */}
+            <div className="bg-[#F5F5F5] border border-[#EBEBEB] rounded-[16px] p-8 shadow-sm flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] group fade-up">
+              {/* Initials Avatar */}
+              <div className="w-20 h-20 rounded-full bg-[#0A0A0A] text-white font-display font-bold text-2xl flex items-center justify-center mb-6 shadow group-hover:bg-[#E0E0E0] group-hover:text-black transition-colors select-none">
+                ARG
+              </div>
+              <h4 className="font-display font-bold text-xl text-[#0A0A0A] mb-1">Ayush Raj Gupta</h4>
+              <p className="font-mono text-xs text-[#0A0A0A] uppercase tracking-widest mb-4 font-semibold">Co-Founder</p>
+              <p className="text-[#666666] text-xs leading-relaxed max-w-xs">
+                Ayush co-founded Nexix Technology with a focus on client relationships and creative strategy. He plays a key role in shaping the company's direction and ensuring every project delivers real value to clients.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CORE VALUES */}
-      <section className="py-24 bg-white border-b border-brand-border">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-left mb-16">
-            <span className="font-mono text-xs uppercase tracking-widest text-brand-text-muted block mb-3">HOW WE ENGAGE</span>
-            <h2 className="font-display font-bold text-4xl text-brand-primary leading-tight tracking-tight">
+      {/* VALUES SECTION */}
+      <section className="py-[100px] bg-[#F5F5F5] border-b border-[#E8E8E8]">
+        <div className="max-w-[1200px] mx-auto px-6">
+          <div className="text-left mb-12">
+            <span className="section-eyebrow text-[#888888] font-mono text-xs uppercase tracking-widest block mb-3">
+              HOW WE OPERATE
+            </span>
+            <h2 className="section-title text-[#0A0A0A] text-3xl sm:text-4xl font-display font-bold leading-tight">
               Our Core Values
             </h2>
           </div>
 
-          {/* Horizontal Scroll Row */}
-          <div className="flex gap-6 overflow-x-auto pb-8 snap-x-mandatory no-scrollbar custom-scrollbar">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((val, idx) => (
-              <div key={idx} className="flex-none w-[280px] sm:w-[320px] bg-white border border-brand-border rounded-2xl p-6 shadow-sm snap-start flex flex-col justify-between h-[260px] premium-card">
+              <div
+                key={idx}
+                className="bg-white border border-[#EBEBEB] rounded-[16px] p-6 shadow-sm flex flex-col justify-between h-[250px] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] group fade-up"
+              >
                 <div>
-                  <div className="w-10 h-10 rounded-lg bg-brand-bg-alt flex items-center justify-center text-brand-primary mb-6 border border-brand-border">
+                  <div className="w-10 h-10 rounded-lg bg-[#F5F5F5] flex items-center justify-center text-[#0A0A0A] mb-6 border border-[#EBEBEB] group-hover:bg-[#0A0A0A] group-hover:text-white transition-colors">
                     <val.icon className="w-5 h-5" />
                   </div>
-                  <h4 className="font-display font-bold text-lg text-brand-primary mb-2 text-left">{val.title}</h4>
-                  <p className="text-brand-text-muted text-xs font-sans text-left leading-relaxed">{val.desc}</p>
+                  <h4 className="font-display font-bold text-lg text-[#0A0A0A] mb-2 text-left">{val.title}</h4>
+                  <p className="text-[#666666] text-xs font-sans text-left leading-relaxed">{val.desc}</p>
                 </div>
               </div>
             ))}
           </div>
-
-          <div className="text-center mt-4 text-[10px] font-mono text-brand-text-muted tracking-widest uppercase block sm:hidden animate-pulse">
-            Swipe left/right to view values ✦
-          </div>
         </div>
       </section>
 
-      {/* TEAM SECTION */}
-      <section className="py-24 bg-brand-bg-alt border-b border-brand-border">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <span className="font-mono text-xs uppercase tracking-widest text-brand-text-muted block mb-3">THE COLLECTIVE</span>
-            <h2 className="font-display font-bold text-4xl text-brand-primary leading-tight tracking-tight">
-              A growing team of developers & designers.
+      {/* MEET THE TEAM */}
+      <section className="py-[100px] bg-white border-b border-[#E8E8E8]">
+        <div className="max-w-[1200px] mx-auto px-6">
+          <div className="text-center mb-12">
+            <span className="section-eyebrow text-[#888888] font-mono text-xs uppercase tracking-widest block mb-3">
+              THE COLLECTIVE
+            </span>
+            <h2 className="section-title text-[#0A0A0A] text-3xl sm:text-4xl font-display font-bold">
+              Meet the Team
             </h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {team.map((member, idx) => (
-              <div key={idx} className="bg-white border border-brand-border rounded-2xl p-8 shadow-sm flex flex-col items-center text-center premium-card">
+              <div key={idx} className="bg-[#F5F5F5] border border-[#EBEBEB] rounded-[16px] p-8 shadow-sm flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] group fade-up">
                 {/* Initials Avatar */}
-                <div className="w-20 h-20 rounded-full bg-brand-primary text-white font-display font-bold text-2xl flex items-center justify-center mb-6 shadow">
+                <div className="w-20 h-20 rounded-full bg-[#0A0A0A] text-white font-display font-bold text-2xl flex items-center justify-center mb-6 shadow group-hover:bg-[#E0E0E0] group-hover:text-black transition-colors select-none">
                   {member.initials}
                 </div>
-                <h4 className="font-display font-bold text-xl text-brand-primary mb-1">{member.name}</h4>
-                <p className="font-mono text-xs text-brand-cyan uppercase tracking-widest">{member.role}</p>
+                <h4 className="font-display font-bold text-xl text-[#0A0A0A] mb-1">{member.name}</h4>
+                <p className="font-mono text-xs text-[#0A0A0A] uppercase tracking-widest mb-4 font-semibold">{member.role}</p>
+                <p className="text-[#666666] text-xs leading-relaxed max-w-xs">{member.bio}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA STRIP (BLACK) */}
-      <section className="py-20 bg-brand-primary text-white border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8 text-left">
-          <div>
-            <h2 className="font-display font-bold text-3xl sm:text-4xl text-white mb-2 leading-tight">
-              Ready to work with a dedicated agency?
-            </h2>
-            <p className="text-white/60 font-sans text-sm">
-              Contact us today for a free review and consultation of your website.
-            </p>
-          </div>
-          <button
-            onClick={() => {
-              navigate("/contact");
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-            className="bg-white text-brand-primary hover:bg-brand-cyan hover:text-brand-primary font-display font-bold px-8 py-4 rounded-full text-base transition-all duration-300 flex items-center gap-2 cursor-pointer whitespace-nowrap"
-          >
-            Let's Build Something Together
-            <ArrowRight className="w-5 h-5" />
-          </button>
+      {/* STATS ROW */}
+      <section className="py-[60px] bg-[#F5F5F5] border-b border-[#E8E8E8] text-center select-none">
+        <div className="max-w-[1200px] mx-auto px-6 grid grid-cols-1 sm:grid-cols-3 gap-8">
+          {[
+            { value: "2026", label: "Founded", desc: "Established as a dedicated client-focused web development company." },
+            { value: "100%", label: "Client-First", desc: "Dedicated support and transparent communication at every stage." },
+            { value: "Fast", label: "Turnaround", desc: "Highly optimized layouts delivered on schedule." }
+          ].map((stat, idx) => (
+            <div key={idx} className="flex flex-col items-center fade-up">
+              <span className="font-display font-extrabold text-5xl text-[#0A0A0A]">
+                {stat.value}
+              </span>
+              <span className="font-sans font-bold text-sm text-[#0A0A0A] mt-2 mb-1">
+                {stat.label}
+              </span>
+              <span className="text-xs text-[#666666] max-w-xs leading-normal">
+                {stat.desc}
+              </span>
+            </div>
+          ))}
         </div>
       </section>
+
+      {/* CTA BANNER */}
+      <CTABanner />
+
     </div>
   );
 }
