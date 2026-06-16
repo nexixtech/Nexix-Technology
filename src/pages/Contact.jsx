@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Mail, MapPin, Clock, Send } from "lucide-react";
+import { contactService } from "../services/contactService";
 
 const LinkedinIcon = () => (
   <svg className="w-4 h-4" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
@@ -27,24 +28,57 @@ export default function Contact() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     subject: "",
     message: ""
   });
-  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(null); // null, true, false
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simulate submit
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({ name: "", email: "", subject: "", message: "" });
-    }, 3000);
+    
+    // Client-side validations
+    if (!formData.name.trim() || !formData.email.trim() || !formData.subject.trim() || !formData.message.trim()) {
+      setSubmitSuccess(false);
+      setErrorMessage("Please fill in all required fields.");
+      return;
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email.trim())) {
+      setSubmitSuccess(false);
+      setErrorMessage("Please enter a valid email address.");
+      return;
+    }
+
+    setSubmitting(true);
+    setSubmitSuccess(null);
+    setErrorMessage("");
+
+    try {
+      await contactService.submitForm({
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim() || null,
+        subject: formData.subject.trim(),
+        message: formData.message.trim()
+      });
+      setSubmitSuccess(true);
+      setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
+    } catch (err) {
+      console.error("Contact form submission error:", err);
+      setSubmitSuccess(false);
+      setErrorMessage(err.message || "Failed to submit your message. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -75,17 +109,23 @@ export default function Contact() {
               Send Us a Message
             </h3>
 
-            {submitted ? (
+            {submitSuccess === true ? (
               <div className="bg-[#0A0A0A]/5 border border-[#0A0A0A]/20 text-[#0A0A0A] font-mono text-xs p-4 rounded-lg select-none">
                 ✦ THANK YOU! WE HAVE RECEIVED YOUR MESSAGE AND WILL RESPOND WITHIN 24 HOURS.
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                 
+                {submitSuccess === false && (
+                  <div className="bg-red-50 border border-red-200 text-red-800 font-mono text-xs p-4 rounded-lg select-none">
+                    ⚠ {errorMessage}
+                  </div>
+                )}
+
                 {/* Name */}
                 <div className="flex flex-col gap-2">
                   <label className="font-mono text-[10px] uppercase tracking-wider text-[#888888] font-bold">
-                    YOUR NAME
+                    YOUR NAME *
                   </label>
                   <input
                     type="text"
@@ -101,7 +141,7 @@ export default function Contact() {
                 {/* Email */}
                 <div className="flex flex-col gap-2">
                   <label className="font-mono text-[10px] uppercase tracking-wider text-[#888888] font-bold">
-                    EMAIL ADDRESS
+                    EMAIL ADDRESS *
                   </label>
                   <input
                     type="email"
@@ -114,10 +154,25 @@ export default function Contact() {
                   />
                 </div>
 
+                {/* Phone */}
+                <div className="flex flex-col gap-2">
+                  <label className="font-mono text-[10px] uppercase tracking-wider text-[#888888] font-bold">
+                    PHONE NUMBER (OPTIONAL)
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="Enter your phone number"
+                    className="bg-[#F5F5F5] border border-[#EBEBEB] text-[#0A0A0A] rounded-[8px] px-4 py-3.5 text-sm outline-none transition-all focus:border-[#0A0A0A] focus:bg-white"
+                  />
+                </div>
+
                 {/* Subject */}
                 <div className="flex flex-col gap-2">
                   <label className="font-mono text-[10px] uppercase tracking-wider text-[#888888] font-bold">
-                    PROJECT TYPE / SUBJECT
+                    PROJECT TYPE / SUBJECT *
                   </label>
                   <input
                     type="text"
@@ -133,7 +188,7 @@ export default function Contact() {
                 {/* Message */}
                 <div className="flex flex-col gap-2">
                   <label className="font-mono text-[10px] uppercase tracking-wider text-[#888888] font-bold">
-                    PROJECT DESCRIPTION
+                    PROJECT DESCRIPTION *
                   </label>
                   <textarea
                     name="message"
@@ -149,9 +204,10 @@ export default function Contact() {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="bg-[#0A0A0A] hover:bg-[#E0E0E0] hover:text-black text-white font-display font-semibold py-4 rounded-[8px] transition-all flex items-center justify-center gap-2 cursor-pointer w-full"
+                  disabled={submitting}
+                  className="bg-[#0A0A0A] hover:bg-[#E0E0E0] hover:text-black text-white font-display font-semibold py-4 rounded-[8px] transition-all flex items-center justify-center gap-2 cursor-pointer w-full disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <span>Send Message</span>
+                  <span>{submitting ? "Sending..." : "Send Message"}</span>
                   <Send className="w-4 h-4" />
                 </button>
 

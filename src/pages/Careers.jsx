@@ -1,8 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Globe, TrendingUp, Users, CreditCard, ArrowRight, Briefcase, MapPin, Clock } from "lucide-react";
+import { useJobs } from "../hooks/useJobs";
+import LoadingState from "../components/LoadingState";
+import EmptyState from "../components/EmptyState";
+import ErrorState from "../components/ErrorState";
 
 export default function Careers() {
+  const { jobs, loading, error, refetch } = useJobs();
+
   const benefits = [
     {
       title: "Remote-Friendly",
@@ -23,16 +29,6 @@ export default function Careers() {
       title: "Competitive Pay",
       desc: "Above-market rates based on your engineering output, with timely monthly payouts.",
       icon: CreditCard
-    }
-  ];
-
-  const jobs = [
-    {
-      title: "Freelance Web Developer & Designer",
-      dept: "General Interest",
-      location: "India (Remote)",
-      type: "Contract / Project-Based",
-      desc: "We are always looking for talented developers and design minds to collaborate with on custom web projects. If you build clean, fast React interfaces and value client-focused quality, get in touch with your CV and portfolio."
     }
   ];
 
@@ -97,47 +93,59 @@ export default function Careers() {
             </h2>
           </div>
 
-          <div className="flex flex-col gap-6 max-w-4xl">
-            {jobs.map((job, idx) => (
-              <div
-                key={idx}
-                className="bg-white border border-[#EBEBEB] rounded-[16px] p-8 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-6 transition-all duration-300 hover:border-[#0A0A0A]/30 hover:-translate-y-1 fade-up text-left"
-              >
-                <div className="flex-grow">
-                  <h3 className="font-display font-bold text-xl text-[#0A0A0A] mb-2">
-                    {job.title}
-                  </h3>
-                  
-                  {/* Job Metadata Tags */}
-                  <div className="flex flex-wrap gap-4 items-center mb-4">
-                    <span className="flex items-center gap-1 font-mono text-[10px] text-[#0A0A0A] font-bold uppercase tracking-wider">
-                      <Briefcase className="w-3.5 h-3.5" /> {job.dept}
-                    </span>
-                    <span className="flex items-center gap-1 font-mono text-[10px] text-[#888888] uppercase tracking-wider">
-                      <MapPin className="w-3.5 h-3.5" /> {job.location}
-                    </span>
-                    <span className="flex items-center gap-1 font-mono text-[10px] text-[#888888] uppercase tracking-wider">
-                      <Clock className="w-3.5 h-3.5" /> {job.type}
-                    </span>
+          {loading ? (
+            <LoadingState message="Loading current vacancies..." />
+          ) : error ? (
+            <ErrorState message="Failed to load job vacancies." onRetry={refetch} />
+          ) : jobs.length === 0 ? (
+            <EmptyState 
+              message="No open positions currently." 
+              desc="We don't have any active openings right now, but we are always looking for great talent. Feel free to contact us below!" 
+            />
+          ) : (
+            <div className="flex flex-col gap-6 max-w-4xl">
+              {jobs.map((job, idx) => (
+                <div
+                  key={job.id || idx}
+                  className="bg-white border border-[#EBEBEB] rounded-[16px] p-8 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-6 transition-all duration-300 hover:border-[#0A0A0A]/30 hover:-translate-y-1 fade-up text-left"
+                >
+                  <div className="flex-grow">
+                    <h3 className="font-display font-bold text-xl text-[#0A0A0A] mb-2">
+                      {job.title}
+                    </h3>
+                    
+                    {/* Job Metadata Tags */}
+                    <div className="flex flex-wrap gap-4 items-center mb-4">
+                      <span className="flex items-center gap-1 font-mono text-[10px] text-[#0A0A0A] font-bold uppercase tracking-wider">
+                        <Briefcase className="w-3.5 h-3.5" /> {job.department}
+                      </span>
+                      <span className="flex items-center gap-1 font-mono text-[10px] text-[#888888] uppercase tracking-wider">
+                        <MapPin className="w-3.5 h-3.5" /> {job.location}
+                      </span>
+                      <span className="flex items-center gap-1 font-mono text-[10px] text-[#888888] uppercase tracking-wider">
+                        <Clock className="w-3.5 h-3.5" /> {job.job_type}
+                      </span>
+                    </div>
+
+                    <p className="text-[#666666] text-xs leading-relaxed max-w-2xl">
+                      {job.description}
+                    </p>
                   </div>
 
-                  <p className="text-[#666666] text-xs leading-relaxed max-w-2xl">
-                    {job.desc}
-                  </p>
+                  <Link
+                    to="/contact"
+                    className="bg-[#0A0A0A] hover:bg-[#E0E0E0] hover:text-black text-white font-display font-semibold text-xs px-6 py-3.5 rounded-[8px] transition-all flex items-center gap-2 cursor-pointer flex-shrink-0 whitespace-nowrap self-start md:self-center"
+                  >
+                    <span>Apply Now</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
                 </div>
-
-                <Link
-                  to="/contact"
-                  className="bg-[#0A0A0A] hover:bg-[#E0E0E0] hover:text-black text-white font-display font-semibold text-xs px-6 py-3.5 rounded-[8px] transition-all flex items-center gap-2 cursor-pointer flex-shrink-0 whitespace-nowrap self-start md:self-center"
-                >
-                  <span>Apply Now</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
+
 
       {/* CAREERS CTA BANNER */}
       <section className="bg-[#0A0A0A] text-white py-[100px] relative overflow-hidden text-center select-none border-t border-white/10 w-full">

@@ -85,7 +85,7 @@ export default function Home() {
       const centerY = rect.top + rect.height / 2;
       const rotY = ((e.clientX - centerX) / (rect.width / 2)) * 10;
       const rotX = ((e.clientY - centerY) / (rect.height / 2)) * -10;
-      globeContainer.style.transform = 
+      globeContainer.style.transform =
         `rotateY(${rotY}deg) rotateX(${rotX}deg)`;
     };
 
@@ -96,7 +96,7 @@ export default function Home() {
     hero.addEventListener('mousemove', handleMouseMove);
     hero.addEventListener('mouseleave', handleMouseLeave);
 
-    globeContainer.style.transition = 
+    globeContainer.style.transition =
       'transform 350ms cubic-bezier(0.25, 0.46, 0.45, 0.94)';
     globeContainer.style.transformStyle = 'preserve-3d';
 
@@ -157,7 +157,7 @@ export default function Home() {
 
   return (
     <div className="bg-[#F0F0F0] text-brand-primary min-h-screen">
-      
+
       {/* Dynamic inline styles for reveals, noise patterns, and transitions */}
       <style>{`
         .hero-section {
@@ -299,7 +299,7 @@ export default function Home() {
       `}</style>
 
       {/* SECTION 1 — HERO */}
-      <section 
+      <section
         className="hero-section relative overflow-hidden border-b border-[#1A1A1A] select-none"
         style={{
           background: "linear-gradient(135deg, #050505 0%, #0a0a0a 50%, #111111 100%)"
@@ -309,10 +309,10 @@ export default function Home() {
         <div className="absolute inset-0 noise-bg pointer-events-none z-0"></div>
 
         <div className="max-w-[1200px] mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-12 relative z-10 w-full">
-          
+
           {/* Left Column (55% width) */}
           <div className="w-full lg:w-[55%] md:w-[60%] flex flex-col items-start text-left">
-            
+
             {/* Eyebrow */}
             <span className="font-sans text-[11px] font-bold uppercase tracking-[0.15em] text-[#888888] mb-4">
               WELCOME TO NEXIX TECHNOLOGY
@@ -385,7 +385,7 @@ export default function Home() {
       {/* SECTION 2 — SERVICES */}
       <section className="bg-white py-[100px]">
         <div className="max-w-[1200px] mx-auto px-6">
-          
+
           <div className="section-eyebrow fade-up">WHAT WE DO</div>
           <h2 className="section-title fade-up">Our Services</h2>
           <p className="section-sub fade-up">
@@ -403,7 +403,7 @@ export default function Home() {
                   <div className="service-icon-box">
                     <svc.icon className="w-6 h-6 text-[#0A0A0A] flex-none" />
                   </div>
-                  
+
                   <h3 className="font-display font-bold text-lg text-[#0A0A0A] mb-3 leading-snug">
                     {svc.title}
                   </h3>
@@ -441,18 +441,18 @@ export default function Home() {
       {/* SECTION 3 — ABOUT US SPLIT */}
       <section className="bg-[#F5F5F5] py-[100px]">
         <div className="max-w-[1200px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-[80px] items-center text-left">
-          
+
           {/* Left Column */}
           <div className="flex flex-col items-start fade-up">
             <span className="font-sans text-[11px] font-bold uppercase tracking-[0.15em] text-[#888888] mb-3">
               ABOUT US
             </span>
-            
+
             <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-[44px] text-[#0A0A0A] leading-[1.15] mb-6">
               We're More Than<br />
               Just a Web Agency.
             </h2>
-            
+
             <p className="text-[#555] text-[15px] font-sans leading-[1.8] mb-10">
               At Nexix Technology, we combine creativity, technical expertise, and a client-first mindset to build websites that don't just look great — they perform and grow with your business.
             </p>
@@ -493,7 +493,7 @@ export default function Home() {
             {/* Visual Card */}
             <div className="w-full aspect-[4/3] rounded-[20px] bg-gradient-to-br from-[#E5E5E5] to-[#D8D8D8] shadow-[0_20px_60px_rgba(0,0,0,0.1)] overflow-hidden flex flex-col items-center justify-center relative select-none">
               <div className="absolute inset-0 bg-[linear-gradient(to_right,#ccc_1px,transparent_1px),linear-gradient(to_bottom,#ccc_1px,transparent_1px)] bg-[size:32px_32px] opacity-25"></div>
-              
+
               <div className="relative z-10 flex flex-col items-center gap-3">
                 <div className="w-20 h-20 bg-[#0A0A0A] rounded-2xl flex items-center justify-center text-white shadow-lg">
                   <span className="font-display font-bold text-3xl">N</span>
@@ -528,15 +528,15 @@ export default function Home() {
       {/* SECTION 4 — TESTIMONIALS */}
       <section className="bg-white py-[100px]">
         <div className="max-w-[1200px] mx-auto px-6">
-          
+
           <div className="section-eyebrow fade-up">CLIENT LOVE</div>
           <h2 className="section-title fade-up">What Our Clients Say</h2>
 
           {/* Testimonial slider layout */}
           <div className="relative max-w-[840px] mx-auto flex items-center justify-between gap-6 mt-12 fade-up">
-            
+
             {/* Left arrow */}
-            <button 
+            <button
               onClick={handlePrevTestimonial}
               className="w-12 h-12 rounded-full border border-[#E0E0E0] bg-white hover:bg-black hover:text-white hover:border-black flex items-center justify-center text-[#333] transition-colors cursor-pointer select-none flex-none hidden sm:flex"
               aria-label="Previous Testimonial"
@@ -570,7 +570,7 @@ export default function Home() {
             </div>
 
             {/* Right arrow */}
-            <button 
+            <button
               onClick={handleNextTestimonial}
               className="w-12 h-12 rounded-full border border-[#E0E0E0] bg-white hover:bg-black hover:text-white hover:border-black flex items-center justify-center text-[#333] transition-colors cursor-pointer select-none flex-none hidden sm:flex"
               aria-label="Next Testimonial"
@@ -585,9 +585,8 @@ export default function Home() {
               <span
                 key={idx}
                 onClick={() => setActiveTestimonial(idx)}
-                className={`w-[8px] h-[8px] rounded-full transition-all duration-200 cursor-pointer ${
-                  activeTestimonial === idx ? "bg-[#0A0A0A]" : "bg-[#D5D5D5]"
-                }`}
+                className={`w-[8px] h-[8px] rounded-full transition-all duration-200 cursor-pointer ${activeTestimonial === idx ? "bg-[#0A0A0A]" : "bg-[#D5D5D5]"
+                  }`}
               />
             ))}
           </div>
@@ -608,7 +607,7 @@ export default function Home() {
           {/* Logos row */}
           <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 fade-up">
             {logoBarBrands.map((brand, idx) => (
-              <span 
+              <span
                 key={idx}
                 className="flex items-center gap-2 group opacity-50 hover:opacity-100 transition-opacity duration-200 cursor-default"
               >
@@ -624,7 +623,7 @@ export default function Home() {
 
       {/* SECTION 6 — CTA BANNER (No divider before) */}
       <section className="bg-[#0A0A0A] text-white py-[100px] relative overflow-hidden text-center select-none">
-        
+
         {/* ECG line animation across section */}
         <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[60px] pointer-events-none z-0 overflow-hidden opacity-20">
           <svg className="w-full h-full" viewBox="0 0 1000 100" preserveAspectRatio="none">
@@ -639,7 +638,7 @@ export default function Home() {
         </div>
 
         <div className="max-w-[1200px] mx-auto px-6 relative z-10 flex flex-col items-center">
-          
+
           <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-[52px] leading-[1.1] text-white max-w-[600px] fade-up">
             Ready to Build Your<br />
             Digital Future?

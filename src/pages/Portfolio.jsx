@@ -1,8 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { ArrowUpRight, Code, Sparkles, Layout, ShoppingBag, Globe } from "lucide-react";
 import CTABanner from "../components/CTABanner";
+import { useProjects } from "../hooks/useProjects";
+import LoadingState from "../components/LoadingState";
+import EmptyState from "../components/EmptyState";
+import ErrorState from "../components/ErrorState";
+
+const iconMap = {
+  Code,
+  Sparkles,
+  Layout,
+  ShoppingBag,
+  Globe
+};
 
 export default function Portfolio() {
+  const { projects, loading, error, refetch } = useProjects();
   const [selectedCat, setSelectedCat] = useState("All");
   const [animateGrid, setAnimateGrid] = useState(false);
 
@@ -12,73 +25,8 @@ export default function Portfolio() {
     return () => clearTimeout(timer);
   }, [selectedCat]);
 
-  const categories = ["All", "Web Design", "Development", "E-Commerce", "Branding"];
-
-  const projects = [
-    {
-      title: "FinFlow Analytics Dashboard",
-      category: "Development",
-      desc: "A real-time financial tracking dashboard built on custom React components and fast database queries.",
-      icon: Code,
-      accent: "#888888"
-    },
-    {
-      title: "Aura Creative Studio",
-      category: "Web Design",
-      desc: "A minimal, visual-focused photography catalog website featuring smooth masonry transitions.",
-      icon: Layout,
-      accent: "#8A2BE2"
-    },
-    {
-      title: "FashionHub Headless Store",
-      category: "E-Commerce",
-      desc: "A lightning fast, headless Shopify storefront designed for seamless mobile checkouts.",
-      icon: ShoppingBag,
-      accent: "#00FF66"
-    },
-    {
-      title: "Velo Brand Experience",
-      category: "Branding",
-      desc: "Comprehensive style systems, typography rules, SVG logo designs, and visual guidelines.",
-      icon: Sparkles,
-      accent: "#FF007F"
-    },
-    {
-      title: "Novus Property Portal",
-      category: "Development",
-      desc: "Custom database schema search engine for prime estates with direct WhatsApp call pipelines.",
-      icon: Code,
-      accent: "#FFA500"
-    },
-    {
-      title: "Zenith SaaS Landing Page",
-      category: "Web Design",
-      desc: "Single-page visual marketing layout optimized for high conversions and Google ads.",
-      icon: Layout,
-      accent: "#3300FF"
-    },
-    {
-      title: "Organic Marketplace",
-      category: "E-Commerce",
-      desc: "Tailored shopping catalog integrating stripe checkouts, inventory syncing, and automated receipts.",
-      icon: ShoppingBag,
-      accent: "#FF4500"
-    },
-    {
-      title: "Karan Johar Portfolio",
-      category: "Web Design",
-      desc: "Typographic portfolios designed for a digital creator, passing all core web vitals.",
-      icon: Layout,
-      accent: "#CCCCCC"
-    },
-    {
-      title: "LogiCorp Corporate Hub",
-      category: "Branding",
-      desc: "Modern digital guidelines, email templates, presentation layouts, and unified brand books.",
-      icon: Sparkles,
-      accent: "#7FFF00"
-    }
-  ];
+  // Derive categories dynamically from projects database
+  const categories = ["All", ...new Set(projects.map(p => p.category))];
 
   const filteredProjects = selectedCat === "All"
     ? projects
@@ -124,53 +72,80 @@ export default function Portfolio() {
       {/* PORTFOLIO GRID */}
       <section className="py-[100px] bg-white border-b border-[#E8E8E8]">
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-300 ${animateGrid ? "opacity-30 translate-y-2" : "opacity-100 translate-y-0"}`}>
-            {filteredProjects.map((proj, idx) => (
-              <div
-                key={idx}
-                className="bg-white border border-[#EBEBEB] rounded-[16px] overflow-hidden shadow-sm flex flex-col justify-between h-full transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] group fade-up relative"
-              >
-                {/* Visual Area with Grid & Gradient */}
-                <div className="h-[220px] bg-[#0A0A0A] relative flex items-center justify-center p-6 overflow-hidden border-b border-[#EBEBEB]">
-                  {/* Tech grid background pattern */}
-                  <div className="absolute inset-0 bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)] bg-[size:20px_20px] opacity-15"></div>
-                  
-                  {/* Glowing light ball */}
-                  <div className="absolute w-24 h-24 rounded-full blur-3xl opacity-10 group-hover:opacity-25 transition-opacity" style={{ backgroundColor: proj.accent }}></div>
+          {loading ? (
+            <LoadingState message="Loading projects..." />
+          ) : error ? (
+            <ErrorState message="Failed to load projects." onRetry={refetch} />
+          ) : projects.length === 0 ? (
+            <EmptyState 
+              message="No projects on display." 
+              desc="We are updating our portfolio showcase database. Check back soon!" 
+            />
+          ) : (
+            <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-300 ${animateGrid ? "opacity-30 translate-y-2" : "opacity-100 translate-y-0"}`}>
+              {filteredProjects.map((proj, idx) => {
+                const IconComponent = iconMap[proj.icon_name] || Code;
+                return (
+                  <div
+                    key={proj.id || idx}
+                    className="bg-white border border-[#EBEBEB] rounded-[16px] overflow-hidden shadow-sm flex flex-col justify-between h-full transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] group fade-up relative"
+                  >
+                    {/* Visual Area with Grid & Gradient */}
+                    <div className="h-[220px] bg-[#0A0A0A] relative flex items-center justify-center p-6 overflow-hidden border-b border-[#EBEBEB]">
+                      {/* Tech grid background pattern */}
+                      <div className="absolute inset-0 bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)] bg-[size:20px_20px] opacity-15"></div>
+                      
+                      {/* Glowing light ball */}
+                      <div className="absolute w-24 h-24 rounded-full blur-3xl opacity-10 group-hover:opacity-25 transition-opacity" style={{ backgroundColor: proj.accent_color }}></div>
 
-                  {/* Icon Representation */}
-                  <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white relative z-10 group-hover:scale-110 group-hover:border-white transition-all">
-                    <proj.icon className="w-6 h-6 text-white/50 group-hover:text-white" />
-                  </div>
+                      {/* Icon Representation */}
+                      <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white relative z-10 group-hover:scale-110 group-hover:border-white transition-all">
+                        <IconComponent className="w-6 h-6 text-white/50 group-hover:text-white" />
+                      </div>
 
-                  {/* Accent bottom line */}
-                  <div className="absolute bottom-0 left-0 right-0 h-[3px]" style={{ backgroundColor: proj.accent }}></div>
+                      {/* Accent bottom line */}
+                      <div className="absolute bottom-0 left-0 right-0 h-[3px]" style={{ backgroundColor: proj.accent_color }}></div>
 
-                  {/* Hover Overlay */}
-                  <div className="absolute inset-0 bg-[#0A0A0A]/95 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-20">
-                    <div className="text-white text-xs font-mono font-bold tracking-widest flex items-center gap-2">
-                      VIEW CASE STUDY <ArrowUpRight className="w-4 h-4 text-white" />
+                      {/* Hover Overlay */}
+                      {proj.case_study_url ? (
+                        <a 
+                          href={proj.case_study_url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="absolute inset-0 bg-[#0A0A0A]/95 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-20"
+                        >
+                          <div className="text-white text-xs font-mono font-bold tracking-widest flex items-center gap-2">
+                            VIEW CASE STUDY <ArrowUpRight className="w-4 h-4 text-white" />
+                          </div>
+                        </a>
+                      ) : (
+                        <div className="absolute inset-0 bg-[#0A0A0A]/95 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-20">
+                          <div className="text-white text-xs font-mono font-bold tracking-widest flex items-center gap-2">
+                            ACTIVE PROJECT
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Card Body */}
+                    <div className="p-6 flex flex-col justify-between flex-grow text-left">
+                      <div>
+                        <span className="inline-block px-3 py-1 rounded-full bg-[#F5F5F5] border border-[#EBEBEB] text-[10px] font-mono uppercase tracking-wider text-gray-600 mb-3">
+                          {proj.category}
+                        </span>
+                        <h3 className="font-display font-bold text-lg text-[#0A0A0A] leading-tight mb-2 group-hover:text-[#0A0A0A] transition-colors">
+                          {proj.title}
+                        </h3>
+                        <p className="text-[#666666] text-xs leading-relaxed">
+                          {proj.description}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-
-                {/* Card Body */}
-                <div className="p-6 flex flex-col justify-between flex-grow text-left">
-                  <div>
-                    <span className="inline-block px-3 py-1 rounded-full bg-[#F5F5F5] border border-[#EBEBEB] text-[10px] font-mono uppercase tracking-wider text-gray-600 mb-3">
-                      {proj.category}
-                    </span>
-                    <h3 className="font-display font-bold text-lg text-[#0A0A0A] leading-tight mb-2 group-hover:text-[#0A0A0A] transition-colors">
-                      {proj.title}
-                    </h3>
-                    <p className="text-[#666666] text-xs leading-relaxed">
-                      {proj.desc}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
 

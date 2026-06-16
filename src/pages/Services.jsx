@@ -2,103 +2,22 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Code, Layout, ShoppingBag, Database, Sparkles, Wrench, ArrowRight } from "lucide-react";
 import CTABanner from "../components/CTABanner";
+import { useServices } from "../hooks/useServices";
+import LoadingState from "../components/LoadingState";
+import EmptyState from "../components/EmptyState";
+import ErrorState from "../components/ErrorState";
+
+const iconMap = {
+  Code,
+  Layout,
+  ShoppingBag,
+  Database,
+  Sparkles,
+  Wrench
+};
 
 export default function Services() {
-  const serviceList = [
-    {
-      title: "Custom Website Design",
-      desc: "Tailored to your brand identity, creating clean, modern, and professional digital signatures that engage users.",
-      icon: Code,
-      inclusions: [
-        "Brand identity styling layout design",
-        "Professional typography and visual systems",
-        "Custom vector graphic assets design",
-        "Modern color palette configuration"
-      ]
-    },
-    {
-      title: "Responsive Layouts",
-      desc: "Optimized mobile-friendly designs that render flawlessly across smartphones, tablets, laptops, and desktop screens.",
-      icon: Layout,
-      inclusions: [
-        "Fluid grid and flexbox architectures",
-        "Touch-optimized navigation bars",
-        "Adaptive styling for all viewports",
-        "High-performance media configurations"
-      ]
-    },
-    {
-      title: "Business Websites & Landing Pages",
-      desc: "Results-driven corporate portals, digital portfolios, and marketing landing pages built to convert visitors.",
-      icon: Sparkles,
-      inclusions: [
-        "Custom corporate web templates",
-        "Digital portfolios for creators",
-        "Lead generation landing pages",
-        "Call-to-action content frameworks"
-      ]
-    },
-    {
-      title: "SEO-Friendly Structure",
-      desc: "Fast-loading, search-engine-optimized code architecture to help your business achieve organic visibility on Google.",
-      icon: Code,
-      inclusions: [
-        "Lightweight React/Vite compilation",
-        "Google Search Console configuration",
-        "Optimized schema markup tags",
-        "Google Lighthouse performance audits"
-      ]
-    },
-    {
-      title: "User-Friendly CMS Integration",
-      desc: "Integrate decoupled content management systems so your team can easily update page text and media without touching code.",
-      icon: Database,
-      inclusions: [
-        "Headless CMS setups (Sanity, Strapi)",
-        "Structured content model schema design",
-        "Custom client editor dashboard configs",
-        "Instant build pipeline trigger webhooks"
-      ]
-    },
-    {
-      title: "Post-Launch Support & Maintenance",
-      desc: "Dedicated post-delivery maintenance, hosting assistance, and technical support to keep your site running smoothly.",
-      icon: Wrench,
-      inclusions: [
-        "Hosting and domain setups assistance",
-        "Security updates and bug fixing",
-        "Regular content updates support",
-        "Transparent communication channels"
-      ]
-    }
-  ];
-
-  const futureServicesList = [
-    {
-      title: "Mobile App Development",
-      desc: "Native and cross-platform mobile app development for Android and iOS devices."
-    },
-    {
-      title: "E-Commerce Solutions",
-      desc: "Tailored online storefront setups with shopping carts, checkout funnels, and payment gateways."
-    },
-    {
-      title: "SEO Services",
-      desc: "Ongoing organic visibility strategy, search analytics, and advanced marketing integrations."
-    },
-    {
-      title: "Digital Marketing & Social Media",
-      desc: "Comprehensive campaigns, content strategies, and brand promotion across major channels."
-    },
-    {
-      title: "Cloud Hosting & Domain Management",
-      desc: "Scalable hosting architectures, database instances setups, and custom domain integrations."
-    },
-    {
-      title: "Custom Software & Web Apps",
-      desc: "Complex dashboards, automated administrative portals, and tailor-made software solutions."
-    }
-  ];
+  const { services, loading, error, refetch } = useServices();
 
   const pricingTiers = [
     {
@@ -139,6 +58,9 @@ export default function Services() {
     }
   ];
 
+  const activeServices = services.filter(s => !s.is_coming_soon);
+  const futureServices = services.filter(s => s.is_coming_soon);
+
   return (
     <div className="bg-[#FFFFFF] text-[#0A0A0A] font-sans">
       
@@ -160,73 +82,93 @@ export default function Services() {
       {/* SERVICES GRID */}
       <section className="py-[100px] bg-[#F5F5F5] border-b border-[#E8E8E8]">
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {serviceList.map((svc, idx) => (
-              <div
-                key={idx}
-                className="bg-white border border-[#EBEBEB] rounded-[16px] p-8 shadow-sm flex flex-col justify-between transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] group fade-up h-full"
-              >
-                <div>
-                  <div className="w-12 h-12 rounded-xl bg-[#F5F5F5] flex items-center justify-center text-[#0A0A0A] mb-6 border border-[#EBEBEB] group-hover:bg-[#0A0A0A] group-hover:text-white transition-colors">
-                    <svc.icon className="w-6 h-6" />
-                  </div>
-                  
-                  <h3 className="font-display font-bold text-xl text-[#0A0A0A] mb-4 text-left">
-                    {svc.title}
-                  </h3>
-                  
-                  <p className="text-[#666666] text-sm leading-relaxed mb-6 text-left">
-                    {svc.desc}
-                  </p>
+          {loading ? (
+            <LoadingState message="Loading our services..." />
+          ) : error ? (
+            <ErrorState message="Failed to load services." onRetry={refetch} />
+          ) : services.length === 0 ? (
+            <EmptyState 
+              message="No services available." 
+              desc="We are updating our service catalog. Please check back later." 
+            />
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {activeServices.map((svc, idx) => {
+                  const IconComponent = iconMap[svc.icon_name] || Code;
+                  return (
+                    <div
+                      key={svc.id || idx}
+                      className="bg-white border border-[#EBEBEB] rounded-[16px] p-8 shadow-sm flex flex-col justify-between transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] group fade-up h-full"
+                    >
+                      <div>
+                        <div className="w-12 h-12 rounded-xl bg-[#F5F5F5] flex items-center justify-center text-[#0A0A0A] mb-6 border border-[#EBEBEB] group-hover:bg-[#0A0A0A] group-hover:text-white transition-colors">
+                          <IconComponent className="w-6 h-6" />
+                        </div>
+                        
+                        <h3 className="font-display font-bold text-xl text-[#0A0A0A] mb-4 text-left">
+                          {svc.title}
+                        </h3>
+                        
+                        <p className="text-[#666666] text-sm leading-relaxed mb-6 text-left">
+                          {svc.description}
+                        </p>
 
-                  <h4 className="font-mono text-[10px] text-[#888888] uppercase tracking-wider mb-3 text-left font-bold">
-                    WHAT'S INCLUDED:
-                  </h4>
-                  
-                  <ul className="flex flex-col gap-2 mb-6 text-left">
-                    {svc.inclusions.map((inc, i) => (
-                      <li key={i} className="text-[#666666] text-xs flex items-center gap-2">
-                        <span className="text-[#0A0A0A] text-xs font-bold">✓</span> {inc}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                        <h4 className="font-mono text-[10px] text-[#888888] uppercase tracking-wider mb-3 text-left font-bold">
+                          WHAT'S INCLUDED:
+                        </h4>
+                        
+                        <ul className="flex flex-col gap-2 mb-6 text-left">
+                          {(svc.inclusions || []).map((inc, i) => (
+                            <li key={i} className="text-[#666666] text-xs flex items-center gap-2">
+                              <span className="text-[#0A0A0A] text-xs font-bold">✓</span> {inc}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-            ))}
-          </div>
 
-          {/* FUTURE SERVICES / COMING SOON */}
-          <div className="text-center mt-24 mb-12">
-            <span className="font-mono text-xs uppercase tracking-widest text-[#888888] block mb-3">
-              FUTURE OFFERINGS
-            </span>
-            <h2 className="font-display font-bold text-3xl sm:text-4xl text-[#0A0A0A] tracking-tight">
-              Coming Soon
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 opacity-80">
-            {futureServicesList.map((svc, idx) => (
-              <div
-                key={idx}
-                className="bg-white/85 border border-[#EBEBEB]/80 rounded-[16px] p-8 shadow-sm flex flex-col justify-between h-full relative"
-              >
-                <div>
-                  <div className="flex justify-between items-center mb-6">
-                    <span className="bg-[#0A0A0A] text-white text-[9px] font-mono uppercase tracking-widest px-2.5 py-1 rounded-full font-bold">
-                      Coming Soon
+              {/* FUTURE SERVICES / COMING SOON */}
+              {futureServices.length > 0 && (
+                <>
+                  <div className="text-center mt-24 mb-12">
+                    <span className="font-mono text-xs uppercase tracking-widest text-[#888888] block mb-3">
+                      FUTURE OFFERINGS
                     </span>
+                    <h2 className="font-display font-bold text-3xl sm:text-4xl text-[#0A0A0A] tracking-tight">
+                      Coming Soon
+                    </h2>
                   </div>
-                  <h3 className="font-display font-bold text-lg text-[#0A0A0A] mb-3 text-left">
-                    {svc.title}
-                  </h3>
-                  <p className="text-[#666666]/80 text-xs leading-relaxed text-left">
-                    {svc.desc}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 opacity-80">
+                    {futureServices.map((svc, idx) => (
+                      <div
+                        key={svc.id || idx}
+                        className="bg-white/85 border border-[#EBEBEB]/80 rounded-[16px] p-8 shadow-sm flex flex-col justify-between h-full relative"
+                      >
+                        <div>
+                          <div className="flex justify-between items-center mb-6">
+                            <span className="bg-[#0A0A0A] text-white text-[9px] font-mono uppercase tracking-widest px-2.5 py-1 rounded-full font-bold">
+                              Coming Soon
+                            </span>
+                          </div>
+                          <h3 className="font-display font-bold text-lg text-[#0A0A0A] mb-3 text-left">
+                            {svc.title}
+                          </h3>
+                          <p className="text-[#666666]/80 text-xs leading-relaxed text-left">
+                            {svc.description}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </>
+          )}
         </div>
       </section>
 
