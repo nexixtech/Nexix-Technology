@@ -193,7 +193,9 @@ function HeroCube() {
 }
 
 export default function App() {
-  const [loading, setLoading] = useState(true);
+  const isHome = window.location.pathname === "/";
+  const alreadyLoaded = sessionStorage.getItem("nexix_loaded") === "true";
+  const [loading, setLoading] = useState(isHome && !alreadyLoaded);
   const [theme, setTheme] = useState(() => {
     try {
       return localStorage.getItem("nexix-theme") || "dark";
@@ -236,7 +238,10 @@ export default function App() {
             transition:"background 0.3s ease, color 0.3s ease",
           }}
         >
-        {loading && <LoadingScreen onDone={() => setLoading(false)} />}
+        {loading && <LoadingScreen onDone={() => {
+          sessionStorage.setItem("nexix_loaded", "true");
+          setLoading(false);
+        }} />}
         <Routes>
           {/* Home Route */}
           <Route path="/" element={
