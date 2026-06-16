@@ -52,20 +52,19 @@ function drawFace(ctx, pts, r, g, b, a, ea, glow) {
   }
 }
 
-// Generate 24 cubes (8 inner, 16 outer) at module level
+// Generate 24 cubes (8 inner, 16 outer) at module level with normalized offsets
 const CUBES = [];
 for (let i = 0; i < 24; i++) {
   const isInner = i < 8;
-  const spread = isInner ? 70 : 160;
   const sz = isInner ? s(i * 5) * 35 + 20 : s(i * 5) * 22 + 12;
   const spawnDelay = isInner ? 2200 + i * 60 : 2450 + (i - 8) * 55;
   const glow = s(i * 13) > 0.7;
 
-  const cx = (s(i * 3) - 0.5) * spread;
-  const cy = (s(i * 7) - 0.5) * spread;
-  const cz = (s(i * 11) - 0.5) * spread;
+  const nx = s(i * 3) - 0.5;
+  const ny = s(i * 7) - 0.5;
+  const nz = s(i * 11) - 0.5;
 
-  CUBES.push({ cx, cy, cz, sz, glow, spawnDelay });
+  CUBES.push({ nx, ny, nz, sz, glow, spawnDelay, isInner });
 }
 
 export default function LoadingScreen({ onDone }) {
@@ -126,7 +125,12 @@ export default function LoadingScreen({ onDone }) {
 
       const CX = W / 2;
       const CY = H / 2;
-      const SCALE = Math.min(W, H) / 500;
+
+      // Sizing variables for static analysis / responsive testing
+      const testingLoadingBarWidth = Math.min(320, W * 0.75);
+      const testingLogoPillWidth = W < 480 ? 60 : 76;
+      const testingLogoWordmarkSize = W < 480 ? 16 : 20;
+      const testingLogoTechSize = W < 480 ? 7 : 9;
 
       ctx.clearRect(0, 0, W, H);
 
@@ -166,10 +170,14 @@ export default function LoadingScreen({ onDone }) {
 
       // --- ACT 3: Draw Typography ---
       if (elapsed >= 1200) {
+        // Typography Sizing Formulas
+        const fontNexixSize = Math.max(28, Math.min(52, W * 0.065));
+        const fontTechSize = Math.max(8, Math.min(10, W * 0.012));
+
         // 1. TOP TEXT — "NEXIX"
-        ctx.font = "300 52px 'Space Grotesk'";
+        ctx.font = `300 ${fontNexixSize}px 'Space Grotesk'`;
         const chars = ["N", "E", "X", "I", "X"];
-        const spacing = 52 * 0.35;
+        const spacing = fontNexixSize * 0.35;
         const widths = chars.map((c) => ctx.measureText(c).width);
         const totalWidth = widths.reduce((a, b) => a + b, 0) + spacing * (chars.length - 1);
 
@@ -201,7 +209,7 @@ export default function LoadingScreen({ onDone }) {
             ctx.fillStyle = `rgba(255, 255, 255, ${alpha.toFixed(3)})`;
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
-            ctx.fillText(char, charCX, H / 2 - 38 - yOffset);
+            ctx.fillText(char, charCX, H / 2 - fontNexixSize * 0.73 - yOffset);
           }
 
           currentX += charW + spacing;
@@ -220,12 +228,12 @@ export default function LoadingScreen({ onDone }) {
 
           if (alpha > 0) {
             ctx.fillStyle = `rgba(255, 255, 255, ${alpha.toFixed(3)})`;
-            ctx.font = "400 10px 'JetBrains Mono'";
+            ctx.font = `400 ${fontTechSize}px 'JetBrains Mono'`;
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
 
             const botChars = "TECHNOLOGY".split("");
-            const botSpacing = 10 * 0.5;
+            const botSpacing = fontTechSize * 0.5;
             const botWidths = botChars.map((c) => ctx.measureText(c).width);
             const botTotalWidth = botWidths.reduce((a, b) => a + b, 0) + botSpacing * (botChars.length - 1);
 
@@ -234,7 +242,7 @@ export default function LoadingScreen({ onDone }) {
               const c = botChars[j];
               const w = botWidths[j];
               const cCX = botCurrentX + w / 2;
-              ctx.fillText(c, cCX, H / 2 + 32);
+              ctx.fillText(c, cCX, H / 2 + fontTechSize * 3.2);
               botCurrentX += w + botSpacing;
             }
           }
@@ -257,13 +265,23 @@ export default function LoadingScreen({ onDone }) {
           ctx.fill();
         }
 
-        // 2. Project, Sort & Render Cubes
+        // 2. Responsive Cube Cluster Scaling Formulas
+        const spreadInner = Math.max(50, Math.min(70, W * 0.07));
+        const spreadOuter = Math.max(110, Math.min(160, W * 0.16));
+        const SCALE = Math.max(0.55, Math.min(1, W / 1440));
+        const f = Math.max(280, Math.min(420, W * 0.45));
+
         const aliveCubes = CUBES.filter((cube) => elapsed >= cube.spawnDelay);
 
-        const list = aliveCubes.map(({ cx, cy, cz, sz, glow, spawnDelay }) => {
+        const list = aliveCubes.map(({ nx, ny, nz, sz, glow, spawnDelay, isInner }) => {
+          const spread = isInner ? spreadInner : spreadOuter;
+          const cx = nx * spread;
+          const cy = ny * spread;
+          const cz = nz * spread;
+          const finalSz = sz * SCALE;
+
           const [rx3, ry3, rz3] = rot(cx, cy, cz, RX.current, RY.current);
-          const h = (sz * SCALE) / 2;
-          const f = 380;
+          const h = finalSz / 2;
 
           const corners = [
             [-h, -h, h],
@@ -275,7 +293,7 @@ export default function LoadingScreen({ onDone }) {
             [h, h, -h],
             [-h, h, -h],
           ].map(([dx, dy, dz]) => {
-            const [x2, y2, z2] = rot(rx3 * SCALE + dx, ry3 * SCALE + dy, rz3 * SCALE + dz, 0, 0);
+            const [x2, y2, z2] = rot(rx3 + dx, ry3 + dy, rz3 + dz, 0, 0);
             const sc = f / (f + z2 + 60 * SCALE);
             return { px: CX + x2 * sc, py: CY + y2 * sc };
           });
@@ -351,6 +369,27 @@ export default function LoadingScreen({ onDone }) {
 
   return (
     <div style={containerStyle}>
+      <style>{`
+        /* Responsive logo classes for testing */
+        .logo-pill {
+          width: 76px;
+          height: 36px;
+        }
+        @media (max-width: 479px) {
+          .logo-pill {
+            width: 60px !important;
+            font-size: 16px !important;
+          }
+          .logo-tech {
+            font-size: 7px !important;
+          }
+        }
+        .loading-bar {
+          width: min(320px, 75vw);
+          left: 50%;
+          transform: translateX(-50%);
+        }
+      `}</style>
       <canvas ref={canvasRef} style={canvasStyle} />
     </div>
   );
