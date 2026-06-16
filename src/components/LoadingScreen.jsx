@@ -9,6 +9,18 @@ function lerp(a, b, t) {
   return a + (b - a) * Math.max(0, Math.min(1, t));
 }
 
+function easeOutCubic(t) {
+  return 1 - Math.pow(1 - t, 3);
+}
+
+function easeInCubic(t) {
+  return t * t * t;
+}
+
+function easeInOutCubic(t) {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
 function rot(x, y, z, rx, ry) {
   let y1 = y * Math.cos(rx) - z * Math.sin(rx);
   let z1 = y * Math.sin(rx) + z * Math.cos(rx);
@@ -17,7 +29,7 @@ function rot(x, y, z, rx, ry) {
   return [x2, y1, z2];
 }
 
-function drawFace(ctx, pts, r, g, b, a, ea, glow) {
+function drawFace(ctx, pts, r, g, b, a, ea, glow, shadowBlurOverride = 18) {
   ctx.beginPath();
   ctx.moveTo(pts[0].px, pts[0].py);
   for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].px, pts[i].py);
@@ -28,81 +40,131 @@ function drawFace(ctx, pts, r, g, b, a, ea, glow) {
   if (glow) {
     ctx.save();
     ctx.shadowColor = "rgba(255,255,255,0.95)";
-    ctx.shadowBlur = 14;
+    ctx.shadowBlur = shadowBlurOverride;
     ctx.strokeStyle = `rgba(255,255,255,${Math.min(1, ea * 1.1).toFixed(2)})`;
     ctx.lineWidth = 1.4;
     ctx.stroke();
     ctx.restore();
   } else {
     ctx.strokeStyle = `rgba(200,200,200,${(ea * 0.25).toFixed(2)})`;
-    ctx.lineWidth = 0.8;
+    ctx.lineWidth = 0.6;
     ctx.stroke();
   }
 }
 
-const easeInCubic = (t) => t * t * t;
-const easeInOutCubic = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-
-// Generate 28 cubes (with original positions preserved for Phase 3 Explode)
+// Generate 80 cubes at module level using radial ring distribution
 const CUBES = [];
-for (let i = 0; i < 28; i++) {
-  const cx = (s(i * 3) - 0.5) * 400;
-  const cy = (s(i * 7) - 0.5) * 400;
-  const cz = (s(i * 11) - 0.5) * 400;
-  const sz = s(i * 5) * 50 + 25;
-  const glow = s(i * 13) > 0.68;
-  CUBES.push({ cx, cy, cz, sz, glow, ox: cx, oy: cy, oz: cz });
+
+// Cube 0: Center
+CUBES.push({
+  cx: 0,
+  cy: 0,
+  cz: 0,
+  sz: 55,
+  glow: true,
+  spawnDelay: 0,
+});
+
+// Ring 1 (cubes 1-7): radius 90px, z spread ±40, sz 30-45, spawnDelay 180-350ms
+for (let i = 1; i <= 7; i++) {
+  const angle = ((i - 1) / 7) * Math.PI * 2;
+  const radius = 90;
+  const cx = Math.cos(angle) * radius;
+  const cy = Math.sin(angle) * radius;
+  const cz = (s(i * 7) - 0.5) * 80;
+  const sz = lerp(30, 45, s(i * 11));
+  const glow = s(i * 13) > 0.72;
+  const spawnDelay = lerp(180, 350, (i - 1) / 6);
+  CUBES.push({ cx, cy, cz, sz, glow, spawnDelay });
+}
+
+// Ring 2 (cubes 8-20): radius 190px, z spread ±80, sz 20-35, spawnDelay 400-650ms
+for (let i = 8; i <= 20; i++) {
+  const angle = ((i - 8) / 13) * Math.PI * 2;
+  const radius = 190;
+  const cx = Math.cos(angle) * radius;
+  const cy = Math.sin(angle) * radius;
+  const cz = (s(i * 7) - 0.5) * 160;
+  const sz = lerp(20, 35, s(i * 11));
+  const glow = s(i * 13) > 0.72;
+  const spawnDelay = lerp(400, 650, (i - 8) / 12);
+  CUBES.push({ cx, cy, cz, sz, glow, spawnDelay });
+}
+
+// Ring 3 (cubes 21-42): radius 320px, z spread ±130, sz 14-28, spawnDelay 700-1050ms
+for (let i = 21; i <= 42; i++) {
+  const angle = ((i - 21) / 22) * Math.PI * 2;
+  const radius = 320;
+  const cx = Math.cos(angle) * radius;
+  const cy = Math.sin(angle) * radius;
+  const cz = (s(i * 7) - 0.5) * 260;
+  const sz = lerp(14, 28, s(i * 11));
+  const glow = s(i * 13) > 0.72;
+  const spawnDelay = lerp(700, 1050, (i - 21) / 21);
+  CUBES.push({ cx, cy, cz, sz, glow, spawnDelay });
+}
+
+// Ring 4 (cubes 43-79): radius 480px, z spread ±180, sz 10-20, spawnDelay 1100-1600ms
+for (let i = 43; i <= 79; i++) {
+  const angle = ((i - 43) / 37) * Math.PI * 2;
+  const radius = 480;
+  const cx = Math.cos(angle) * radius;
+  const cy = Math.sin(angle) * radius;
+  const cz = (s(i * 7) - 0.5) * 360;
+  const sz = lerp(10, 20, s(i * 11));
+  const glow = s(i * 13) > 0.72;
+  const spawnDelay = lerp(1100, 1600, (i - 43) / 36);
+  CUBES.push({ cx, cy, cz, sz, glow, spawnDelay });
 }
 
 const labels = ["INITIALIZING...", "LOADING ASSETS...", "ALMOST READY...", "LAUNCHING"];
 
 export default function LoadingScreen({ onDone }) {
-  const [canvasOpacity, setCanvasOpacity] = useState(1);
-  const [uiOpacity, setUiOpacity] = useState(1);
+  const [overlayOpacity, setOverlayOpacity] = useState(1);
+  const [logoVisible, setLogoVisible] = useState(true);
   const [progressWidth, setProgressWidth] = useState("0%");
   const [labelIndex, setLabelIndex] = useState(0);
 
   const canvasRef = useRef(null);
-  const RX = useRef(0.38);
-  const RY = useRef(-0.45);
-  const phaseRef = useRef(1);
+  const RX = useRef(0.3);
+  const RY = useRef(-0.4);
   const startTimeRef = useRef(null);
   const raf = useRef(null);
 
-  // Label cycling
+  // Label cycling every 450ms
   useEffect(() => {
     const labelInterval = setInterval(() => {
       setLabelIndex((prev) => (prev < labels.length - 1 ? prev + 1 : prev));
-    }, 500);
+    }, 450);
 
     return () => clearInterval(labelInterval);
   }, []);
 
-  // UI, Progress, and Exit timings
+  // UI state and timing lifecycle
   useEffect(() => {
     const progressTimer = setTimeout(() => {
       setProgressWidth("100%");
-    }, 50);
+    }, 80);
 
-    // Fade UI to 0 over 300ms starting at Phase 3 (2600ms)
+    // At 2400ms, start fading out the logo and loading bar
     const uiFadeTimer = setTimeout(() => {
-      setUiOpacity(0);
-    }, 2600);
+      setLogoVisible(false);
+    }, 2400);
 
-    // Fade Canvas wrapper 1->0 over 600ms starting at Phase 3 (2600ms)
-    const canvasFadeTimer = setTimeout(() => {
-      setCanvasOpacity(0);
-    }, 2600);
+    // At 2700ms, transition overlayOpacity to 0
+    const overlayFadeTimer = setTimeout(() => {
+      setOverlayOpacity(0);
+    }, 2700);
 
-    // Call onDone at 3200ms
+    // At 3300ms, trigger onDone()
     const doneTimer = setTimeout(() => {
       if (onDone) onDone();
-    }, 3200);
+    }, 3300);
 
     return () => {
       clearTimeout(progressTimer);
       clearTimeout(uiFadeTimer);
-      clearTimeout(canvasFadeTimer);
+      clearTimeout(overlayFadeTimer);
       clearTimeout(doneTimer);
     };
   }, [onDone]);
@@ -138,32 +200,26 @@ export default function LoadingScreen({ onDone }) {
 
       const CX = W / 2;
       const CY = H / 2;
-      const SCALE = Math.min(W, H) / 500;
+      const SCALE = Math.min(W, H) / 600;
 
       ctx.clearRect(0, 0, W, H);
 
       if (!startTimeRef.current) startTimeRef.current = Date.now();
       const elapsed = Date.now() - startTimeRef.current;
 
-      // Update rotation speed based on phase
-      if (elapsed < 2000) {
-        phaseRef.current = 1;
-        RX.current += 0.002;
-        RY.current += 0.006;
-      } else if (elapsed < 2600) {
-        phaseRef.current = 2;
-        RX.current += 0.004;
-        RY.current += 0.016;
+      // Update rotation speed
+      if (elapsed < 1800) {
+        RX.current += 0.0015;
+        RY.current += 0.007;
       } else {
-        phaseRef.current = 3;
-        RX.current += 0.004;
-        RY.current += 0.016;
+        RX.current += 0.002;
+        RY.current += 0.010;
       }
 
       const t = Date.now() * 0.001;
 
-      // 1. Draw 60 Star Particles
-      for (let i = 0; i < 60; i++) {
+      // 1. Draw 40 Star Particles
+      for (let i = 0; i < 40; i++) {
         const px = s(i * 31) * W;
         const py = s(i * 37) * H;
         const twinkle = (Math.sin(t * (0.5 + s(i * 41) * 1.5) + i) + 1) / 2;
@@ -175,45 +231,13 @@ export default function LoadingScreen({ onDone }) {
         ctx.fill();
       }
 
-      // 2. Draw Phase 2 Expanding Pulse Ring
-      if (phaseRef.current === 2) {
-        const pulseT = (elapsed - 2000) / 600;
-        const maxRadius = Math.max(W, H) * 0.8;
-        const radius = pulseT * maxRadius;
-        const ringOpacity = Math.max(0, 1 - pulseT);
+      // Filter and project spawned/alive cubes
+      const aliveCubes = CUBES.filter((cube) => elapsed > cube.spawnDelay);
 
-        ctx.beginPath();
-        ctx.arc(CX, CY, radius, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(255, 255, 255, ${ringOpacity.toFixed(3)})`;
-        ctx.lineWidth = 2;
-        ctx.stroke();
-      }
-
-      // 3. Project and Sort Cubes
-      const list = CUBES.map(({ ox, oy, oz, sz, glow }) => {
-        let cx, cy, cz;
-
-        if (phaseRef.current === 1) {
-          const tVal = elapsed / 2000;
-          const factor = easeInOutCubic(tVal);
-          cx = lerp(ox, 0, factor);
-          cy = lerp(oy, 0, factor);
-          cz = lerp(oz, 0, factor);
-        } else if (phaseRef.current === 2) {
-          cx = 0;
-          cy = 0;
-          cz = 0;
-        } else {
-          const tVal = Math.min(1, (elapsed - 2600) / 600);
-          const factor = easeInCubic(tVal);
-          cx = lerp(0, ox * 8, factor);
-          cy = lerp(0, oy * 8, factor);
-          cz = lerp(0, oz * 8, factor);
-        }
-
+      const list = aliveCubes.map(({ cx, cy, cz, sz, glow, spawnDelay }) => {
         const [rx3, ry3, rz3] = rot(cx, cy, cz, RX.current, RY.current);
         const h = (sz * SCALE) / 2;
-        const f = 500;
+        const f = 420;
 
         const corners = [
           [-h, -h, h],
@@ -231,31 +255,38 @@ export default function LoadingScreen({ onDone }) {
         });
 
         const depth = (rz3 + 200) / 400;
-        return { corners, glow, depth, z: rz3 };
+
+        // Cube alpha: fade in over 300ms from its spawn delay
+        const cubeT = Math.min(1, (elapsed - spawnDelay) / 300);
+        const cubeAlpha = lerp(0, 1, easeOutCubic(cubeT));
+
+        return { corners, glow, depth, z: rz3, alpha: cubeAlpha };
       }).sort((a, b) => b.z - a.z);
 
-      // Render Cubes
-      for (const { corners: C, glow, depth } of list) {
+      // 2. Render Cubes back-to-front
+      const blurValue = elapsed >= 1800 ? 28 : 18;
+      for (const { corners: C, glow, depth, alpha: cubeAlpha } of list) {
         const [ftl, ftr, fbr, fbl, btl, btr, bbr, bbl] = C;
         const br = Math.max(0.15, Math.min(1, depth));
         const topC = Math.round(lerp(60, 245, br));
         const frC = Math.round(lerp(30, 185, br * 0.75));
         const riC = Math.round(lerp(20, 145, br * 0.55));
         const leC = Math.round(lerp(14, 105, br * 0.4));
-        const ea = lerp(0.25, 0.95, br);
+        const ea = lerp(0.25, 0.95, br) * cubeAlpha;
+        const faceAlpha = ea * cubeAlpha;
 
-        drawFace(ctx, [bbl, bbr, fbr, fbl], frC - 25, frC - 25, frC - 25, ea * 0.55, ea, glow);
-        drawFace(ctx, [ftl, btl, bbl, fbl], leC, leC, leC, ea * 0.82, ea, glow);
-        drawFace(ctx, [ftr, btr, bbr, fbr], riC, riC, riC, ea * 0.88, ea, glow);
-        drawFace(ctx, [ftl, ftr, fbr, fbl], frC, frC, frC, ea, ea, glow);
-        drawFace(ctx, [btl, btr, ftr, ftl], topC, topC, topC, ea, ea, glow);
+        drawFace(ctx, [bbl, bbr, fbr, fbl], frC - 25, frC - 25, frC - 25, faceAlpha * 0.55, ea, glow, blurValue);
+        drawFace(ctx, [ftl, btl, bbl, fbl], leC, leC, leC, faceAlpha * 0.82, ea, glow, blurValue);
+        drawFace(ctx, [ftr, btr, bbr, fbr], riC, riC, riC, faceAlpha * 0.88, ea, glow, blurValue);
+        drawFace(ctx, [ftl, ftr, fbr, fbl], frC, frC, frC, faceAlpha, ea, glow, blurValue);
+        drawFace(ctx, [btl, btr, ftr, ftl], topC, topC, topC, faceAlpha, ea, glow, blurValue);
 
         if (glow && br > 0.4) {
           const mx = (ftl.px + fbr.px) / 2;
           const my = (ftl.py + fbr.py) / 2;
           const gr = ctx.createRadialGradient(mx, my, 0, mx, my, Math.abs(ftr.px - ftl.px) * 0.9);
-          gr.addColorStop(0, `rgba(255,255,255,${(br * 0.65).toFixed(2)})`);
-          gr.addColorStop(0.5, `rgba(200,220,255,${(br * 0.2).toFixed(2)})`);
+          gr.addColorStop(0, `rgba(255,255,255,${(br * 0.65 * cubeAlpha).toFixed(2)})`);
+          gr.addColorStop(0.5, `rgba(200,220,255,${(br * 0.2 * cubeAlpha).toFixed(2)})`);
           gr.addColorStop(1, "rgba(0,0,0,0)");
           ctx.beginPath();
           ctx.moveTo(ftl.px, ftl.py);
@@ -264,6 +295,23 @@ export default function LoadingScreen({ onDone }) {
           ctx.fillStyle = gr;
           ctx.fill();
         }
+      }
+
+      // 3. Draw Vignette in Phase 2 hold
+      if (elapsed >= 1800 && elapsed < 2400) {
+        const grad = ctx.createRadialGradient(CX, CY, 0, CX, CY, Math.max(W, H) * 0.7);
+        grad.addColorStop(0, "rgba(0, 0, 0, 0)");
+        grad.addColorStop(1, "rgba(0, 0, 0, 0.4)");
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, W, H);
+      }
+
+      // 4. Phase 3 White Flash
+      if (elapsed >= 2400) {
+        const whiteT = Math.min(1, (elapsed - 2400) / 300);
+        const whiteOpacity = easeInCubic(whiteT);
+        ctx.fillStyle = `rgba(255, 255, 255, ${whiteOpacity.toFixed(3)})`;
+        ctx.fillRect(0, 0, W, H);
       }
 
       raf.current = requestAnimationFrame(draw);
@@ -276,7 +324,7 @@ export default function LoadingScreen({ onDone }) {
     };
   }, []);
 
-  // Inline Styles
+  // Styles
   const containerStyle = {
     position: "fixed",
     inset: 0,
@@ -284,19 +332,19 @@ export default function LoadingScreen({ onDone }) {
     backgroundColor: "#080808",
     overflow: "hidden",
     userSelect: "none",
+    opacity: overlayOpacity,
+    transition: "opacity 600ms ease",
   };
 
-  const canvasWrapperStyle = {
-    position: "absolute",
-    inset: 0,
-    opacity: canvasOpacity,
-    transition: "opacity 600ms ease",
-    zIndex: 1,
+  const canvasStyle = {
+    width: "100%",
+    height: "100%",
+    display: "block",
   };
 
   const logoStyle = {
     position: "absolute",
-    top: "8%",
+    top: "7%",
     left: "50%",
     transform: "translateX(-50%)",
     display: "flex",
@@ -304,33 +352,34 @@ export default function LoadingScreen({ onDone }) {
     gap: "10px",
     userSelect: "none",
     cursor: "default",
-    opacity: uiOpacity,
+    opacity: logoVisible ? 1 : 0,
     transition: "opacity 300ms ease",
-    animation: uiOpacity === 0 ? "none" : "logo-fade-in 500ms cubic-bezier(0.16, 1, 0.3, 1) 200ms forwards",
-    zIndex: 3,
+    animation: !logoVisible ? "none" : "logo-fade-in 500ms cubic-bezier(0.16, 1, 0.3, 1) 100ms forwards",
+    zIndex: 10,
   };
 
   const barContainerStyle = {
     position: "absolute",
-    bottom: "10%",
+    bottom: "9%",
     left: "50%",
     transform: "translateX(-50%)",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     gap: "12px",
-    opacity: uiOpacity,
+    opacity: logoVisible ? 1 : 0,
     transition: "opacity 300ms ease",
-    width: "380px",
-    zIndex: 3,
+    width: "320px",
+    zIndex: 10,
   };
 
   const scanlineStyle = {
     position: "absolute",
     inset: 0,
     pointerEvents: "none",
-    zIndex: 2,
-    background: "repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, rgba(255,255,255,0.012) 3px, rgba(255,255,255,0.012) 4px)",
+    zIndex: 3,
+    opacity: 0.6,
+    background: "repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, rgba(255,255,255,0.015) 3px, rgba(255,255,255,0.015) 4px)",
   };
 
   return (
@@ -349,10 +398,8 @@ export default function LoadingScreen({ onDone }) {
       {/* Scanline Overlay */}
       <div style={scanlineStyle} />
 
-      {/* Canvas Wrapper */}
-      <div style={canvasWrapperStyle}>
-        <canvas ref={canvasRef} style={{ width: "100%", height: "100%", display: "block" }} />
-      </div>
+      {/* Canvas */}
+      <canvas ref={canvasRef} style={canvasStyle} />
 
       {/* Logo Area */}
       <div style={logoStyle}>
@@ -435,7 +482,7 @@ export default function LoadingScreen({ onDone }) {
       <div style={barContainerStyle}>
         {/* Progress Track */}
         <div style={{
-          width: "380px",
+          width: "320px",
           height: "2px",
           backgroundColor: "rgba(255,255,255,0.08)",
           borderRadius: "9999px",
@@ -446,7 +493,7 @@ export default function LoadingScreen({ onDone }) {
             width: progressWidth,
             height: "100%",
             backgroundColor: "rgba(255,255,255,0.7)",
-            transition: "width 2000ms ease-in-out",
+            transition: "width 1800ms ease-in-out",
           }} />
         </div>
 

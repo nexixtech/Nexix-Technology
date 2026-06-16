@@ -214,7 +214,7 @@ export default function App() {
     <>
       <style>{`
         .site-reveal {
-          animation: site-reveal 600ms ease forwards;
+          animation: site-reveal 700ms ease forwards;
         }
         @keyframes site-reveal {
           from { opacity: 0; }
