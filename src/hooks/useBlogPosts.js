@@ -20,7 +20,9 @@ export function useBlogPosts() {
   }, []);
 
   useEffect(() => {
-    fetchPosts();
+    Promise.resolve().then(() => {
+      fetchPosts();
+    });
   }, [fetchPosts]);
 
   return { posts, loading, error, refetch: fetchPosts };

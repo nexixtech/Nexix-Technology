@@ -20,7 +20,9 @@ export function useProjects() {
   }, []);
 
   useEffect(() => {
-    fetchProjects();
+    Promise.resolve().then(() => {
+      fetchProjects();
+    });
   }, [fetchProjects]);
 
   return { projects, loading, error, refetch: fetchProjects };

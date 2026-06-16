@@ -20,7 +20,9 @@ export function useServices() {
   }, []);
 
   useEffect(() => {
-    fetchServices();
+    Promise.resolve().then(() => {
+      fetchServices();
+    });
   }, [fetchServices]);
 
   return { services, loading, error, refetch: fetchServices };

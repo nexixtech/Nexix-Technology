@@ -20,9 +20,17 @@ export default function Portfolio() {
   const [animateGrid, setAnimateGrid] = useState(false);
 
   useEffect(() => {
-    setAnimateGrid(true);
-    const timer = setTimeout(() => setAnimateGrid(false), 250);
-    return () => clearTimeout(timer);
+    let active = true;
+    Promise.resolve().then(() => {
+      if (active) setAnimateGrid(true);
+    });
+    const timer = setTimeout(() => {
+      if (active) setAnimateGrid(false);
+    }, 250);
+    return () => {
+      active = false;
+      clearTimeout(timer);
+    };
   }, [selectedCat]);
 
   // Derive categories dynamically from projects database

@@ -1,16 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowUpRight,
   ArrowRight,
   Code,
   Sparkles,
-  TrendingUp,
-  Layers,
-  Settings,
   Calendar,
-  User,
-  CheckCircle,
   Layout,
   ShoppingBag,
   Globe,
@@ -52,9 +47,17 @@ export default function NewSections({ isDark }) {
 
   // Trigger grid animation when category changes
   useEffect(() => {
-    setAnimateGrid(true);
-    const timer = setTimeout(() => setAnimateGrid(false), 300);
-    return () => clearTimeout(timer);
+    let active = true;
+    Promise.resolve().then(() => {
+      if (active) setAnimateGrid(true);
+    });
+    const timer = setTimeout(() => {
+      if (active) setAnimateGrid(false);
+    }, 300);
+    return () => {
+      active = false;
+      clearTimeout(timer);
+    };
   }, [activeCategory]);
 
   // Static Fallbacks
@@ -181,10 +184,12 @@ export default function NewSections({ isDark }) {
     if (projects.length > 0) {
       const derivedCats = [...new Set(projects.map(p => p.category))];
       if (!derivedCats.includes(activeCategory)) {
-        setActiveCategory(derivedCats[0]);
+        Promise.resolve().then(() => {
+          setActiveCategory(derivedCats[0]);
+        });
       }
     }
-  }, [dbProjects]);
+  }, [projects, activeCategory]);
 
   // Filter projects by active category
   const filteredProjects = projects.filter(proj => proj.category === activeCategory).slice(0, 3);

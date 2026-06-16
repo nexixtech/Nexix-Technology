@@ -1,6 +1,8 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { Lightbulb, ShieldCheck, Users, Activity } from "lucide-react";
 import CTABanner from "../components/CTABanner";
+import { teamService } from "../services/teamService";
+
 
 export default function About() {
   const values = [
@@ -26,30 +28,62 @@ export default function About() {
     }
   ];
 
-  const team = [
+  const [dbTeam, setDbTeam] = useState([]);
+
+  const loadTeamMembers = async () => {
+    try {
+      const data = await teamService.getTeamMembers();
+      setDbTeam(data || []);
+    } catch (error) {
+      console.error("Failed to load team:", error);
+    }
+  };
+
+  useEffect(() => {
+    Promise.resolve().then(() => {
+      loadTeamMembers();
+    });
+  }, []);
+
+  const defaultTeam = [
     {
       name: "Kabir Verma",
       role: "Lead Developer & Founder",
       bio: "Focused on crafting clean React architectures, responsive layouts, and modern web applications.",
-      initials: "KV"
+      initial: "KV"
     },
     {
       name: "Ananya Roy",
       role: "Lead UI/UX Designer",
       bio: "Crafting modern design systems, fluid layouts, and visual experiences that convert users.",
-      initials: "AR"
+      initial: "AR"
     },
     {
       name: "Dev Patel",
       role: "Full Stack Engineer",
       bio: "Specialist in API setups, server optimizations, and headless CMS integrations.",
-      initials: "DP"
+      initial: "DP"
     }
   ];
 
+  // Resolve team (DB or fallback) and map fields consistently
+  const teamData = dbTeam && dbTeam.length > 0 ? dbTeam : defaultTeam;
+  const team = teamData.map(member => ({
+    name: member.name,
+    role: member.role,
+    bio: member.bio,
+    initial: member.initial || member.initials || (member.name ? member.name.split(" ").map(n => n[0]).join("") : "")
+  }));
+
+  const teamGridClass = team.length === 1
+    ? "flex justify-center"
+    : team.length === 2
+      ? "grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-3xl mx-auto"
+      : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8";
+
   return (
     <div className="bg-[#FFFFFF] text-[#0A0A0A] font-sans">
-      
+
       {/* HERO SECTION */}
       <section className="bg-[#0A0A0A] text-white py-[100px] text-left">
         <div className="max-w-[1200px] mx-auto px-6">
@@ -181,12 +215,12 @@ export default function About() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className={teamGridClass}>
             {team.map((member, idx) => (
-              <div key={idx} className="bg-[#F5F5F5] border border-[#EBEBEB] rounded-[16px] p-8 shadow-sm flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] group fade-up">
+              <div key={idx} className="w-full max-w-sm mx-auto bg-[#F5F5F5] border border-[#EBEBEB] rounded-[16px] p-8 shadow-sm flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_16px_48px_rgba(0,0,0,0.1)] group fade-up">
                 {/* Initials Avatar */}
                 <div className="w-20 h-20 rounded-full bg-[#0A0A0A] text-white font-display font-bold text-2xl flex items-center justify-center mb-6 shadow group-hover:bg-[#E0E0E0] group-hover:text-black transition-colors select-none">
-                  {member.initials}
+                  {member.initial}
                 </div>
                 <h4 className="font-display font-bold text-xl text-[#0A0A0A] mb-1">{member.name}</h4>
                 <p className="font-mono text-xs text-[#0A0A0A] uppercase tracking-widest mb-4 font-semibold">{member.role}</p>

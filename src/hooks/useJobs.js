@@ -20,7 +20,9 @@ export function useJobs() {
   }, []);
 
   useEffect(() => {
-    fetchJobs();
+    Promise.resolve().then(() => {
+      fetchJobs();
+    });
   }, [fetchJobs]);
 
   return { jobs, loading, error, refetch: fetchJobs };
