@@ -56,7 +56,7 @@ function drawFace(ctx, pts, r, g, b, a, ea, glow) {
 const CUBES = [];
 for (let i = 0; i < 24; i++) {
   const isInner = i < 8;
-  const sz = isInner ? s(i * 5) * 35 + 20 : s(i * 5) * 22 + 12;
+  const sz = isInner ? s(i * 5) * 45 + 30 : s(i * 5) * 28 + 16;
   const spawnDelay = isInner ? 2200 + i * 60 : 2450 + (i - 8) * 55;
   const glow = s(i * 13) > 0.7;
 
@@ -266,10 +266,10 @@ export default function LoadingScreen({ onDone }) {
         }
 
         // 2. Responsive Cube Cluster Scaling Formulas
-        const spreadInner = Math.max(50, Math.min(70, W * 0.07));
-        const spreadOuter = Math.max(110, Math.min(160, W * 0.16));
-        const SCALE = Math.max(0.55, Math.min(1, W / 1440));
-        const f = Math.max(280, Math.min(420, W * 0.45));
+        const spreadInner = Math.max(80, Math.min(120, W * 0.09));
+        const spreadOuter = Math.max(180, Math.min(280, W * 0.22));
+        const SCALE = Math.max(0.85, Math.min(1.4, W / 1000));
+        const f = Math.max(400, Math.min(600, W * 0.5));
 
         const aliveCubes = CUBES.filter((cube) => elapsed >= cube.spawnDelay);
 
