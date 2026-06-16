@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import NewSections from "./components/NewSections";
+import LoadingScreen from "./components/LoadingScreen";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import About from "./pages/About";
@@ -192,6 +193,7 @@ function HeroCube() {
 }
 
 export default function App() {
+  const [loading, setLoading] = useState(true);
   const [theme, setTheme] = useState(() => {
     try {
       return localStorage.getItem("nexix-theme") || "dark";
@@ -221,6 +223,7 @@ export default function App() {
         flexDirection:"column",
         transition:"background 0.3s ease, color 0.3s ease",
       }}>
+        {loading && <LoadingScreen onDone={() => setLoading(false)} />}
         <Routes>
           {/* Home Route */}
           <Route path="/" element={
