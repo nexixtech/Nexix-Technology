@@ -1,9 +1,54 @@
 import React, { useState, useEffect } from "react";
-import { ArrowUpRight, ArrowRight, Code, Sparkles, TrendingUp, Layers, Settings, Calendar, User, CheckCircle } from "lucide-react";
+import { Link } from "react-router-dom";
+import {
+  ArrowUpRight,
+  ArrowRight,
+  Code,
+  Sparkles,
+  TrendingUp,
+  Layers,
+  Settings,
+  Calendar,
+  User,
+  CheckCircle,
+  Layout,
+  ShoppingBag,
+  Globe,
+  Database,
+  Wrench
+} from "lucide-react";
+import { useProjects } from "../hooks/useProjects";
+import { useBlogPosts } from "../hooks/useBlogPosts";
+import { useServices } from "../hooks/useServices";
+
+const iconMap = {
+  Code,
+  Sparkles,
+  Layout,
+  ShoppingBag,
+  Globe,
+  Database,
+  Wrench
+};
+
+const formatDate = (dateStr) => {
+  if (!dateStr) return "";
+  const date = new Date(dateStr);
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  });
+};
 
 export default function NewSections({ isDark }) {
   const [activeCategory, setActiveCategory] = useState("Web Design");
   const [animateGrid, setAnimateGrid] = useState(false);
+
+  // Fetch data dynamically from Supabase via hooks
+  const { projects: dbProjects } = useProjects();
+  const { posts: dbPosts } = useBlogPosts();
+  const { services: dbServices } = useServices();
 
   // Trigger grid animation when category changes
   useEffect(() => {
@@ -12,71 +57,139 @@ export default function NewSections({ isDark }) {
     return () => clearTimeout(timer);
   }, [activeCategory]);
 
-  const categories = ["Web Design", "Development", "E-Commerce", "Maintenance"];
-
-  const projects = [
+  // Static Fallbacks
+  const defaultProjects = [
     {
-      name: "SaaS Analytics Dashboard",
+      title: "SaaS Analytics Dashboard",
       category: "Development",
-      desc: "A high-performance React client portal featuring interactive charts, custom tables, and sub-second loading states.",
-      price: "$2,400 / project",
-      accent: "#888888"
+      description: "A high-performance React client portal featuring interactive charts, custom tables, and sub-second loading states.",
+      accent_color: "#888888",
+      icon_name: "Code"
     },
     {
-      name: "FinFlow Mobile Landing",
+      title: "FinFlow Mobile Landing",
       category: "Web Design",
-      desc: "Premium, responsive mobile-first landing page with dark mode, interactive calculators, and custom web animations.",
-      price: "$950 / project",
-      accent: "#8A2BE2"
+      description: "Premium, responsive mobile-first landing page with dark mode, interactive calculators, and custom web animations.",
+      accent_color: "#8A2BE2",
+      icon_name: "Sparkles"
     },
     {
-      name: "NeoMarket E-Commerce Store",
+      title: "NeoMarket E-Commerce Store",
       category: "E-Commerce",
-      desc: "Headless Shopify store with lightning fast page transitions, automated inventory sync, and modern checkout paths.",
-      price: "$3,800 / project",
-      accent: "#00FF66"
+      description: "Headless Shopify store with lightning fast page transitions, automated inventory sync, and modern checkout paths.",
+      accent_color: "#00FF66",
+      icon_name: "ShoppingBag"
     },
     {
-      name: "E-Commerce Core Support",
+      title: "E-Commerce Core Support",
       category: "Maintenance",
-      desc: "Monthly performance monitoring, automated database backups, security patches, and instant recovery SLA guarantees.",
-      price: "$190 / month",
-      accent: "#FF4500"
+      description: "Monthly performance monitoring, automated database backups, security patches, and instant recovery SLA guarantees.",
+      accent_color: "#FF4500",
+      icon_name: "Code"
     },
     {
-      name: "Brand Experience Site",
+      title: "Brand Experience Site",
       category: "Web Design",
-      desc: "An immersive brand showcase featuring rich typography, WebGL backgrounds, and organic scrolling transitions.",
-      price: "$1,800 / project",
-      accent: "#FF007F"
+      description: "An immersive brand showcase featuring rich typography, WebGL backgrounds, and organic scrolling transitions.",
+      accent_color: "#FF007F",
+      icon_name: "Sparkles"
     },
     {
-      name: "Enterprise Admin Portal",
+      title: "Enterprise Admin Portal",
       category: "Development",
-      desc: "A secure, scalable internal management system with advanced RBAC, database migrations, and webhooks.",
-      price: "$4,500 / project",
-      accent: "#3300FF"
+      description: "A secure, scalable internal management system with advanced RBAC, database migrations, and webhooks.",
+      accent_color: "#3300FF",
+      icon_name: "Code"
     },
     {
-      name: "Brand Shop Plus",
+      title: "Brand Shop Plus",
       category: "E-Commerce",
-      desc: "Custom WooCommerce storefront with optimized layout architecture, dynamic pricing models, and direct CRM pipelines.",
-      price: "$2,900 / project",
-      accent: "#FFA500"
+      description: "Custom WooCommerce storefront with optimized layout architecture, dynamic pricing models, and direct CRM pipelines.",
+      accent_color: "#FFA500",
+      icon_name: "ShoppingBag"
     },
     {
-      name: "Core Infrastructure Plan",
+      title: "Core Infrastructure Plan",
       category: "Maintenance",
-      desc: "Comprehensive web hosting audits, SEO vitals tracking, speed optimizations, and priority emergency support.",
-      price: "$350 / month",
-      accent: "#CCCCCC"
+      description: "Comprehensive web hosting audits, SEO vitals tracking, speed optimizations, and priority emergency support.",
+      accent_color: "#CCCCCC",
+      icon_name: "Code"
     }
   ];
+
+  const defaultBlogPosts = [
+    {
+      title: "Why TailWind CSS v4 is a Game Changer for Modern Development",
+      category: "Technology",
+      published_at: "2026-06-14T00:00:00.000Z",
+      excerpt: "An in-depth look at Tailwind's new compilation model, CSS-first configurations, and performance boosts."
+    },
+    {
+      title: "Maximizing Conversions: Landing Page Architecture That Works",
+      category: "Marketing",
+      published_at: "2026-05-28T00:00:00.000Z",
+      excerpt: "The essential layout patterns and cognitive design principles to turn anonymous traffic into customers."
+    },
+    {
+      title: "How to Optimize React Bundle Size for Core Web Vitals",
+      category: "Development",
+      published_at: "2026-05-10T00:00:00.000Z",
+      excerpt: "Practical steps to implement code splitting, tree shaking, and dynamic imports to score 100 on Lighthouse."
+    },
+    {
+      title: "The Cost of Templates: Why Custom Code Outperforms Builders",
+      category: "Business",
+      published_at: "2026-04-15T00:00:00.000Z",
+      excerpt: "Analyzing the long-term impact of template builders on SEO, page performance, and scalability."
+    }
+  ];
+
+  const defaultServices = [
+    {
+      title: "Custom Website Design",
+      description: "Tailored to your brand identity, creating clean, modern, and professional layouts that engage users."
+    },
+    {
+      title: "Responsive Layouts",
+      description: "Optimized mobile-friendly designs that render flawlessly across all modern device screens."
+    },
+    {
+      title: "Ongoing Support",
+      description: "Dedicated post-launch support and regular website checks to keep your pages running smoothly."
+    }
+  ];
+
+  // Resolve projects (DB or fallback) and map fields consistently
+  const projectsData = dbProjects && dbProjects.length > 0 ? dbProjects : defaultProjects;
+  const projects = projectsData.map(p => ({
+    name: p.title || p.name,
+    category: p.category,
+    desc: p.description || p.desc,
+    accent: p.accent_color || p.accent,
+    icon_name: p.icon_name || "Code",
+    case_study_url: p.case_study_url,
+    price: p.price || p.category // Fallback to category name if price metadata isn't set
+  }));
+
+  // Categories derived dynamically from current projects list
+  const categories = projects.length > 0
+    ? [...new Set(projects.map(p => p.category))]
+    : ["Web Design", "Development", "E-Commerce", "Maintenance"];
+
+  // Keep active category valid when database changes
+  useEffect(() => {
+    if (projects.length > 0) {
+      const derivedCats = [...new Set(projects.map(p => p.category))];
+      if (!derivedCats.includes(activeCategory)) {
+        setActiveCategory(derivedCats[0]);
+      }
+    }
+  }, [dbProjects]);
 
   // Filter projects by active category
   const filteredProjects = projects.filter(proj => proj.category === activeCategory).slice(0, 3);
 
-  // Testimonials
+  // Resolve testimonials (remains static)
   const testimonial = {
     quote: "Nexix Technology completely transformed our digital presence. Our landing page loading speed dropped from 4.8 seconds to just 0.9 seconds, which directly increased our conversions by 34% in the first month. Their communication is transparent and their execution is world-class.",
     name: "Vikram Malhotra",
@@ -84,52 +197,24 @@ export default function NewSections({ isDark }) {
     company: "GrowthFlow Technologies"
   };
 
-  // Blog posts
-  const blogPosts = [
-    {
-      title: "Why TailWind CSS v4 is a Game Changer for Modern Development",
-      category: "Technology",
-      date: "June 14, 2026",
-      desc: "An in-depth look at Tailwind's new compilation model, CSS-first configurations, and performance boosts."
-    },
-    {
-      title: "Maximizing Conversions: Landing Page Architecture That Works",
-      category: "Marketing",
-      date: "May 28, 2026",
-      desc: "The essential layout patterns and cognitive design principles to turn anonymous traffic into customers."
-    },
-    {
-      title: "How to Optimize React Bundle Size for Core Web Vitals",
-      category: "Development",
-      date: "May 10, 2026",
-      desc: "Practical steps to implement code splitting, tree shaking, and dynamic imports to score 100 on Lighthouse."
-    },
-    {
-      title: "The Cost of Templates: Why Custom Code Outperforms Builders",
-      category: "Business",
-      date: "April 15, 2026",
-      desc: "Analyzing the long-term impact of template builders on SEO, page performance, and scalability."
-    }
-  ];
+  // Resolve blog posts and map fields consistently
+  const blogPosts = (dbPosts && dbPosts.length > 0 ? dbPosts : defaultBlogPosts).map(p => ({
+    title: p.title,
+    category: p.category,
+    date: p.published_at ? formatDate(p.published_at) : p.date,
+    desc: p.excerpt || p.desc,
+    featured_image: p.featured_image
+  }));
 
-  // Services Overview contrast cards
-  const overviewServices = [
-    {
-      num: "01",
-      title: "Custom Website Design",
-      desc: "Tailored to your brand identity, creating clean, modern, and professional layouts that engage users."
-    },
-    {
-      num: "02",
-      title: "Responsive Layouts",
-      desc: "Optimized mobile-friendly designs that render flawlessly across all modern device screens."
-    },
-    {
-      num: "03",
-      title: "Ongoing Support",
-      desc: "Dedicated post-launch support and regular website checks to keep your pages running smoothly."
-    }
-  ];
+  // Resolve services and map fields consistently
+  const overviewServices = (dbServices && dbServices.length > 0
+    ? dbServices.filter(s => !s.is_coming_soon).slice(0, 3)
+    : defaultServices
+  ).map((s, idx) => ({
+    num: `0${idx + 1}`,
+    title: s.title,
+    desc: s.description || s.desc
+  }));
 
   // Background and border colors depending on theme
   const bgMain = isDark ? "bg-[#080808]" : "bg-[#f5f5f5]";
@@ -176,52 +261,69 @@ export default function NewSections({ isDark }) {
 
         {/* Projects Grid */}
         <div className={`grid grid-cols-1 md:grid-cols-3 gap-6 transition-opacity duration-300 ${animateGrid ? "opacity-30 translate-y-2" : "opacity-100 translate-y-0"}`}>
-          {filteredProjects.map((proj, idx) => (
-            <div
-              key={idx}
-              className={`flex flex-col h-full rounded-2xl overflow-hidden border ${borderAlt} ${bgAlt} group transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.1)]`}
-            >
-              {/* Graphic Placeholder (representing the project image) */}
-              <div className="w-full h-48 bg-[#0D0D0D] relative overflow-hidden flex items-center justify-center select-none border-b border-[#1A1A1A]/10">
-                {/* Tech grid aesthetic */}
-                <div className="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,#333_1px,transparent_1px),linear-gradient(to_bottom,#333_1px,transparent_1px)] bg-[size:20px_20px]"></div>
-                
-                {/* Pulse visual */}
-                <div className="w-16 h-16 rounded-full bg-white/5 border border-white/15 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <Code className="w-6 h-6 text-[#888888] group-hover:text-white transition-colors" />
-                </div>
-                
-                {/* Left accent bar */}
-                <div
-                  className="absolute bottom-0 left-0 right-0 h-1"
-                  style={{ backgroundColor: proj.accent }}
-                ></div>
-              </div>
-
-              {/* Card Body */}
-              <div className="p-6 flex flex-col justify-between flex-grow text-left">
-                <div>
-                  <div className="flex justify-between items-start mb-3 gap-3">
-                    <h3 className={`font-display font-bold text-lg ${textTitle} ${isDark ? "group-hover:text-white" : "group-hover:text-[#0A0A0A]"} transition-colors`}>
-                      {proj.name}
-                    </h3>
+          {filteredProjects.map((proj, idx) => {
+            const IconComponent = iconMap[proj.icon_name] || Code;
+            return (
+              <div
+                key={idx}
+                className={`flex flex-col h-full rounded-2xl overflow-hidden border ${borderAlt} ${bgAlt} group transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.1)]`}
+              >
+                {/* Graphic Placeholder (representing the project image) */}
+                <div className="w-full h-48 bg-[#0D0D0D] relative overflow-hidden flex items-center justify-center select-none border-b border-[#1A1A1A]/10">
+                  {/* Tech grid aesthetic */}
+                  <div className="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,#333_1px,transparent_1px),linear-gradient(to_bottom,#333_1px,transparent_1px)] bg-[size:20px_20px]"></div>
+                  
+                  {/* Pulse visual */}
+                  <div className="w-16 h-16 rounded-full bg-white/5 border border-white/15 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <IconComponent className="w-6 h-6 text-[#888888] group-hover:text-white transition-colors" />
                   </div>
-                  <p className={`${textMuted} text-[13px] leading-relaxed mb-6`}>
-                    {proj.desc}
-                  </p>
+                  
+                  {/* Left accent bar */}
+                  <div
+                    className="absolute bottom-0 left-0 right-0 h-1"
+                    style={{ backgroundColor: proj.accent }}
+                  ></div>
                 </div>
 
-                <div className="flex items-center justify-between border-t border-[#1A1A1A]/10 pt-4 mt-auto">
-                  <span className={`text-[11px] font-mono tracking-wider ${isDark ? "text-white" : "text-[#0A0A0A]"} font-semibold`}>
-                    {proj.price}
-                  </span>
-                  <span className={`text-xs flex items-center gap-1 text-[#888888] font-semibold ${isDark ? "group-hover:text-white" : "group-hover:text-[#0A0A0A]"} transition-colors`}>
-                    View Case <ArrowUpRight className="w-3.5 h-3.5" />
-                  </span>
+                {/* Card Body */}
+                <div className="p-6 flex flex-col justify-between flex-grow text-left">
+                  <div>
+                    <div className="flex justify-between items-start mb-3 gap-3">
+                      <h3 className={`font-display font-bold text-lg ${textTitle} ${isDark ? "group-hover:text-white" : "group-hover:text-[#0A0A0A]"} transition-colors`}>
+                        {proj.name}
+                      </h3>
+                    </div>
+                    <p className={`${textMuted} text-[13px] leading-relaxed mb-6`}>
+                      {proj.desc}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-between border-t border-[#1A1A1A]/10 pt-4 mt-auto">
+                    <span className={`text-[11px] font-mono tracking-wider ${isDark ? "text-white" : "text-[#0A0A0A]"} font-semibold uppercase`}>
+                      {proj.price}
+                    </span>
+                    {proj.case_study_url ? (
+                      <a
+                        href={proj.case_study_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`text-xs flex items-center gap-1 text-[#888888] font-semibold ${isDark ? "group-hover:text-white" : "group-hover:text-[#0A0A0A]"} transition-colors`}
+                      >
+                        View Case <ArrowUpRight className="w-3.5 h-3.5" />
+                      </a>
+                    ) : (
+                      <Link
+                        to="/portfolio"
+                        className={`text-xs flex items-center gap-1 text-[#888888] font-semibold ${isDark ? "group-hover:text-white" : "group-hover:text-[#0A0A0A]"} transition-colors`}
+                      >
+                        View Case <ArrowUpRight className="w-3.5 h-3.5" />
+                      </Link>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -407,14 +509,25 @@ export default function NewSections({ isDark }) {
         {/* 4-card horizontal grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {blogPosts.map((post, idx) => (
-            <div
+            <Link
               key={idx}
-              className={`flex flex-col h-full rounded-xl overflow-hidden border ${borderAlt} ${bgAlt} group transition-all duration-300 ${isDark ? "hover:border-white/50" : "hover:border-[#0A0A0A]/50"} hover:shadow-lg`}
+              to="/blog"
+              className={`flex flex-col h-full rounded-xl overflow-hidden border ${borderAlt} ${bgAlt} group transition-all duration-300 ${isDark ? "hover:border-white/50" : "hover:border-[#0A0A0A]/50"} hover:shadow-lg text-decoration-none`}
             >
               {/* Image placeholder */}
               <div className="w-full h-32 bg-[#0D0D0D] border-b border-[#1A1A1A]/10 relative flex items-center justify-center select-none overflow-hidden">
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#222_1px,transparent_1px)] bg-[size:15px] opacity-15"></div>
-                <Calendar className={`w-5 h-5 text-white/20 group-hover:scale-110 ${isDark ? "group-hover:text-white" : "group-hover:text-[#0A0A0A]"} transition-all`} />
+                {post.featured_image ? (
+                  <img
+                    src={post.featured_image}
+                    alt={post.title}
+                    className="absolute inset-0 w-full h-full object-cover opacity-75 group-hover:scale-105 transition-transform duration-500"
+                  />
+                ) : (
+                  <>
+                    <div className="absolute inset-0 bg-[linear-gradient(to_right,#222_1px,transparent_1px)] bg-[size:15px] opacity-15"></div>
+                    <Calendar className={`w-5 h-5 text-white/20 group-hover:scale-110 ${isDark ? "group-hover:text-white" : "group-hover:text-[#0A0A0A]"} transition-all`} />
+                  </>
+                )}
               </div>
 
               {/* Card content */}
@@ -438,7 +551,7 @@ export default function NewSections({ isDark }) {
                   Read Article <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
@@ -456,9 +569,10 @@ export default function NewSections({ isDark }) {
           {/* 3 Numbered Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {overviewServices.map((svc, idx) => (
-              <div
+              <Link
                 key={idx}
-                className="bg-[#0A0A0A] border border-[#1A1A1A] rounded-2xl p-8 text-left transition-all duration-300 hover:border-white/40 hover:-translate-y-2 hover:shadow-[0_12px_24px_rgba(255,255,255,0.06)] group relative overflow-hidden"
+                to="/services"
+                className="bg-[#0A0A0A] border border-[#1A1A1A] rounded-2xl p-8 text-left transition-all duration-300 hover:border-white/40 hover:-translate-y-2 hover:shadow-[0_12px_24px_rgba(255,255,255,0.06)] group relative overflow-hidden block text-decoration-none"
               >
                 {/* Glow accent */}
                 <div className="absolute -top-12 -left-12 w-24 h-24 bg-white/5 rounded-full blur-2xl group-hover:bg-white/10 transition-colors"></div>
@@ -478,7 +592,7 @@ export default function NewSections({ isDark }) {
                 <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white group-hover:bg-white group-hover:border-white group-hover:text-black transition-all duration-300">
                   <ArrowUpRight className="w-4 h-4" />
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

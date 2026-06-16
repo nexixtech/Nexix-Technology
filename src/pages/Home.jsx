@@ -18,12 +18,35 @@ import {
   Triangle,
   Diamond,
   Hexagon,
-  Activity
+  Activity,
+  Code,
+  ShoppingBag,
+  Database,
+  Sparkles,
+  Wrench,
+  Globe
 } from "lucide-react";
 import HeroCube from "../components/DigitalGlobe";
+import { useServices } from "../hooks/useServices";
+
+const iconMap = {
+  Monitor,
+  Layout,
+  FileText,
+  Headphones,
+  Code,
+  ShoppingBag,
+  Database,
+  Sparkles,
+  Wrench,
+  Globe
+};
 
 export default function Home() {
   const navigate = useNavigate();
+
+  // Fetch data dynamically from Supabase
+  const { services: dbServices } = useServices();
 
   // Testimonial Carousel State
   const [activeTestimonial, setActiveTestimonial] = useState(0);
@@ -106,7 +129,7 @@ export default function Home() {
     };
   }, []);
 
-  const services = [
+  const defaultServices = [
     {
       title: "Website Design & Development",
       description: "Fast, responsive, and fully custom websites built to represent your brand and convert visitors.",
@@ -128,6 +151,17 @@ export default function Home() {
       icon: Headphones
     }
   ];
+
+  // Resolve services (DB or fallback) and map fields consistently
+  const servicesData = dbServices && dbServices.length > 0
+    ? dbServices.filter(s => !s.is_coming_soon).slice(0, 4)
+    : defaultServices;
+
+  const services = servicesData.map(s => ({
+    title: s.title,
+    description: s.description || s.desc,
+    icon: iconMap[s.icon_name] || s.icon || Monitor
+  }));
 
   const aboutFeatures = [
     {
