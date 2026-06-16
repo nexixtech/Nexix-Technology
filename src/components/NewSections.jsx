@@ -517,7 +517,11 @@ export default function NewSections({ isDark }) {
             <Link
               key={idx}
               to="/blog"
-              className={`flex flex-col h-full rounded-xl overflow-hidden border ${borderAlt} ${bgAlt} group transition-all duration-300 ${isDark ? "hover:border-white/50" : "hover:border-[#0A0A0A]/50"} hover:shadow-lg text-decoration-none`}
+              className={`flex flex-col h-full rounded-xl overflow-hidden border group transition-all duration-300 ${
+                isDark
+                  ? "bg-[#161616] border-[#242424] hover:border-white/30 hover:shadow-[0_12px_24px_rgba(255,255,255,0.04)]"
+                  : "bg-white border-[#EBEBEB] hover:border-[#0A0A0A]/50 hover:shadow-[0_12px_24px_rgba(0,0,0,0.08)]"
+              } text-decoration-none`}
             >
               {/* Image placeholder */}
               <div className="w-full h-32 bg-[#0D0D0D] border-b border-[#1A1A1A]/10 relative flex items-center justify-center select-none overflow-hidden">
@@ -577,7 +581,11 @@ export default function NewSections({ isDark }) {
               <Link
                 key={idx}
                 to="/services"
-                className="bg-[#0A0A0A] border border-[#1A1A1A] rounded-2xl p-8 text-left transition-all duration-300 hover:border-white/40 hover:-translate-y-2 hover:shadow-[0_12px_24px_rgba(255,255,255,0.06)] group relative overflow-hidden block text-decoration-none"
+                className={`border rounded-2xl p-8 text-left transition-all duration-300 hover:-translate-y-2 group relative overflow-hidden block text-decoration-none ${
+                  isDark
+                    ? "bg-[#1E1E1E] border-[#2C2C2C] hover:border-white/30 hover:shadow-[0_12px_24px_rgba(255,255,255,0.04)]"
+                    : "bg-[#0A0A0A] border-[#1A1A1A] hover:border-white/40 hover:shadow-[0_12px_24px_rgba(0,0,0,0.15)]"
+                }`}
               >
                 {/* Glow accent */}
                 <div className="absolute -top-12 -left-12 w-24 h-24 bg-white/5 rounded-full blur-2xl group-hover:bg-white/10 transition-colors"></div>
