@@ -211,18 +211,31 @@ export default function App() {
   }, [theme]);
 
   return (
-    <BrowserRouter>
-      <div style={{
-        height:"100vh", width:"100vw",
-        background: isDark ? "#080808" : "#f5f5f5",
-        fontFamily:"'Inter', sans-serif",
-        color: isDark ? "#fff" : "#0a0a0a",
-        overflowY:"auto",
-        overflowX:"hidden",
-        display:"flex",
-        flexDirection:"column",
-        transition:"background 0.3s ease, color 0.3s ease",
-      }}>
+    <>
+      <style>{`
+        .site-reveal {
+          animation: site-reveal 600ms ease forwards;
+        }
+        @keyframes site-reveal {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      `}</style>
+      <BrowserRouter>
+        <div
+          className={loading ? "" : "site-reveal"}
+          style={{
+            height:"100vh", width:"100vw",
+            background: isDark ? "#080808" : "#f5f5f5",
+            fontFamily:"'Inter', sans-serif",
+            color: isDark ? "#fff" : "#0a0a0a",
+            overflowY:"auto",
+            overflowX:"hidden",
+            display:"flex",
+            flexDirection:"column",
+            transition:"background 0.3s ease, color 0.3s ease",
+          }}
+        >
         {loading && <LoadingScreen onDone={() => setLoading(false)} />}
         <Routes>
           {/* Home Route */}
@@ -556,5 +569,6 @@ export default function App() {
         </Routes>
       </div>
     </BrowserRouter>
+  </>
   );
 }

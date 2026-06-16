@@ -40,32 +40,36 @@ function drawFace(ctx, pts, r, g, b, a, ea, glow) {
   }
 }
 
-// Generate 20 cubes (10 inner, 10 outer)
+const easeInCubic = (t) => t * t * t;
+const easeInOutCubic = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+// Generate 28 cubes (with original positions preserved for Phase 3 Explode)
 const CUBES = [];
-for (let i = 0; i < 20; i++) {
-  const isInner = i < 10;
-  const sp = isInner ? 80 : 160;
-  const cx = (s(i * 3) - 0.5) * sp;
-  const cy = (s(i * 7) - 0.5) * sp;
-  const cz = (s(i * 11) - 0.5) * sp;
-  const sz = isInner ? s(i * 5) * 40 + 30 : s(i * 5) * 22 + 14;
+for (let i = 0; i < 28; i++) {
+  const cx = (s(i * 3) - 0.5) * 400;
+  const cy = (s(i * 7) - 0.5) * 400;
+  const cz = (s(i * 11) - 0.5) * 400;
+  const sz = s(i * 5) * 50 + 25;
   const glow = s(i * 13) > 0.68;
-  CUBES.push({ cx, cy, cz, sz, glow });
+  CUBES.push({ cx, cy, cz, sz, glow, ox: cx, oy: cy, oz: cz });
 }
 
 const labels = ["INITIALIZING...", "LOADING ASSETS...", "ALMOST READY...", "LAUNCHING"];
 
 export default function LoadingScreen({ onDone }) {
-  const [opacity, setOpacity] = useState(1);
+  const [canvasOpacity, setCanvasOpacity] = useState(1);
+  const [uiOpacity, setUiOpacity] = useState(1);
   const [progressWidth, setProgressWidth] = useState("0%");
   const [labelIndex, setLabelIndex] = useState(0);
 
   const canvasRef = useRef(null);
   const RX = useRef(0.38);
   const RY = useRef(-0.45);
+  const phaseRef = useRef(1);
+  const startTimeRef = useRef(null);
   const raf = useRef(null);
 
-  // Label cycling timer
+  // Label cycling
   useEffect(() => {
     const labelInterval = setInterval(() => {
       setLabelIndex((prev) => (prev < labels.length - 1 ? prev + 1 : prev));
@@ -74,52 +78,92 @@ export default function LoadingScreen({ onDone }) {
     return () => clearInterval(labelInterval);
   }, []);
 
-  // Overall timing / lifecycle
+  // UI, Progress, and Exit timings
   useEffect(() => {
-    // Trigger loading bar width animation immediately after mount
-    const widthTimer = setTimeout(() => {
+    const progressTimer = setTimeout(() => {
       setProgressWidth("100%");
     }, 50);
 
-    // Trigger exit fade out at 2800ms
-    const fadeTimer = setTimeout(() => {
-      setOpacity(0);
-    }, 2800);
+    // Fade UI to 0 over 300ms starting at Phase 3 (2600ms)
+    const uiFadeTimer = setTimeout(() => {
+      setUiOpacity(0);
+    }, 2600);
 
-    // Call onDone callback at 3400ms (after 600ms fade transition completes)
+    // Fade Canvas wrapper 1->0 over 600ms starting at Phase 3 (2600ms)
+    const canvasFadeTimer = setTimeout(() => {
+      setCanvasOpacity(0);
+    }, 2600);
+
+    // Call onDone at 3200ms
     const doneTimer = setTimeout(() => {
       if (onDone) onDone();
-    }, 3400);
+    }, 3200);
 
     return () => {
-      clearTimeout(widthTimer);
-      clearTimeout(fadeTimer);
+      clearTimeout(progressTimer);
+      clearTimeout(uiFadeTimer);
+      clearTimeout(canvasFadeTimer);
       clearTimeout(doneTimer);
     };
   }, [onDone]);
 
-  // Canvas render loop
+  // Window resize handler
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    return () => window.removeEventListener("resize", resize);
+  }, []);
+
+  // Canvas loop
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
-    const W = canvas.width;
-    const H = canvas.height;
-    const CX = W / 2;
-    const CY = H / 2;
-    const SCALE = 1.1;
 
     function draw() {
+      const W = canvas.width;
+      const H = canvas.height;
+      if (!W || !H) {
+        raf.current = requestAnimationFrame(draw);
+        return;
+      }
+
+      const CX = W / 2;
+      const CY = H / 2;
+      const SCALE = Math.min(W, H) / 500;
+
       ctx.clearRect(0, 0, W, H);
 
-      // Auto-rotate on Y (vy = 0.012), slight X tilt (vx = 0.003)
-      RX.current += 0.003;
-      RY.current += 0.012;
+      if (!startTimeRef.current) startTimeRef.current = Date.now();
+      const elapsed = Date.now() - startTimeRef.current;
+
+      // Update rotation speed based on phase
+      if (elapsed < 2000) {
+        phaseRef.current = 1;
+        RX.current += 0.002;
+        RY.current += 0.006;
+      } else if (elapsed < 2600) {
+        phaseRef.current = 2;
+        RX.current += 0.004;
+        RY.current += 0.016;
+      } else {
+        phaseRef.current = 3;
+        RX.current += 0.004;
+        RY.current += 0.016;
+      }
 
       const t = Date.now() * 0.001;
 
-      // Draw 50 star particles
-      for (let i = 0; i < 50; i++) {
+      // 1. Draw 60 Star Particles
+      for (let i = 0; i < 60; i++) {
         const px = s(i * 31) * W;
         const py = s(i * 37) * H;
         const twinkle = (Math.sin(t * (0.5 + s(i * 41) * 1.5) + i) + 1) / 2;
@@ -131,23 +175,45 @@ export default function LoadingScreen({ onDone }) {
         ctx.fill();
       }
 
-      // Draw Saturn-style rotating ring
-      ctx.save();
-      ctx.translate(CX, CY);
-      ctx.rotate(t * 0.05);
-      ctx.scale(1, 0.35);
-      ctx.beginPath();
-      ctx.arc(0, 0, 160, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(255,255,255,0.08)";
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-      ctx.restore();
+      // 2. Draw Phase 2 Expanding Pulse Ring
+      if (phaseRef.current === 2) {
+        const pulseT = (elapsed - 2000) / 600;
+        const maxRadius = Math.max(W, H) * 0.8;
+        const radius = pulseT * maxRadius;
+        const ringOpacity = Math.max(0, 1 - pulseT);
 
-      // Project and sort cubes
-      const list = CUBES.map(({ cx, cy, cz, sz, glow }) => {
+        ctx.beginPath();
+        ctx.arc(CX, CY, radius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(255, 255, 255, ${ringOpacity.toFixed(3)})`;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+
+      // 3. Project and Sort Cubes
+      const list = CUBES.map(({ ox, oy, oz, sz, glow }) => {
+        let cx, cy, cz;
+
+        if (phaseRef.current === 1) {
+          const tVal = elapsed / 2000;
+          const factor = easeInOutCubic(tVal);
+          cx = lerp(ox, 0, factor);
+          cy = lerp(oy, 0, factor);
+          cz = lerp(oz, 0, factor);
+        } else if (phaseRef.current === 2) {
+          cx = 0;
+          cy = 0;
+          cz = 0;
+        } else {
+          const tVal = Math.min(1, (elapsed - 2600) / 600);
+          const factor = easeInCubic(tVal);
+          cx = lerp(0, ox * 8, factor);
+          cy = lerp(0, oy * 8, factor);
+          cz = lerp(0, oz * 8, factor);
+        }
+
         const [rx3, ry3, rz3] = rot(cx, cy, cz, RX.current, RY.current);
         const h = (sz * SCALE) / 2;
-        const f = 280 * SCALE;
+        const f = 500;
 
         const corners = [
           [-h, -h, h],
@@ -168,7 +234,7 @@ export default function LoadingScreen({ onDone }) {
         return { corners, glow, depth, z: rz3 };
       }).sort((a, b) => b.z - a.z);
 
-      // Render cubes back-to-front
+      // Render Cubes
       for (const { corners: C, glow, depth } of list) {
         const [ftl, ftr, fbr, fbl, btl, btr, bbr, bbl] = C;
         const br = Math.max(0.15, Math.min(1, depth));
@@ -210,44 +276,69 @@ export default function LoadingScreen({ onDone }) {
     };
   }, []);
 
-  // Styles
-  const overlayStyle = {
+  // Inline Styles
+  const containerStyle = {
     position: "fixed",
     inset: 0,
     zIndex: 9999,
     backgroundColor: "#080808",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    opacity: opacity,
-    transition: "opacity 600ms ease",
+    overflow: "hidden",
     userSelect: "none",
-    boxSizing: "border-box",
   };
 
-  const logoContainerStyle = {
-    animation: "logo-fade-in 400ms cubic-bezier(0.16, 1, 0.3, 1) 100ms forwards",
-    opacity: 0,
+  const canvasWrapperStyle = {
+    position: "absolute",
+    inset: 0,
+    opacity: canvasOpacity,
+    transition: "opacity 600ms ease",
+    zIndex: 1,
+  };
+
+  const logoStyle = {
+    position: "absolute",
+    top: "8%",
+    left: "50%",
+    transform: "translateX(-50%)",
     display: "flex",
     alignItems: "center",
     gap: "10px",
+    userSelect: "none",
     cursor: "default",
-    marginBottom: "-20px",
+    opacity: uiOpacity,
+    transition: "opacity 300ms ease",
+    animation: uiOpacity === 0 ? "none" : "logo-fade-in 500ms cubic-bezier(0.16, 1, 0.3, 1) 200ms forwards",
+    zIndex: 3,
   };
 
-  const canvasStyle = {
-    width: "500px",
-    height: "500px",
-    display: "block",
+  const barContainerStyle = {
+    position: "absolute",
+    bottom: "10%",
+    left: "50%",
+    transform: "translateX(-50%)",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "12px",
+    opacity: uiOpacity,
+    transition: "opacity 300ms ease",
+    width: "380px",
+    zIndex: 3,
+  };
+
+  const scanlineStyle = {
+    position: "absolute",
+    inset: 0,
+    pointerEvents: "none",
+    zIndex: 2,
+    background: "repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, rgba(255,255,255,0.012) 3px, rgba(255,255,255,0.012) 4px)",
   };
 
   return (
-    <div style={overlayStyle}>
+    <div style={containerStyle}>
       <style>{`
         @keyframes logo-fade-in {
-          0% { opacity: 0; transform: translateY(8px); }
-          100% { opacity: 1; transform: translateY(0); }
+          0% { opacity: 0; transform: translate(-50%, 8px); }
+          100% { opacity: 1; transform: translate(-50%, 0px); }
         }
         @keyframes pulse-dot {
           0%, 100% { transform: scale(1); opacity: 1; }
@@ -255,8 +346,16 @@ export default function LoadingScreen({ onDone }) {
         }
       `}</style>
 
+      {/* Scanline Overlay */}
+      <div style={scanlineStyle} />
+
+      {/* Canvas Wrapper */}
+      <div style={canvasWrapperStyle}>
+        <canvas ref={canvasRef} style={{ width: "100%", height: "100%", display: "block" }} />
+      </div>
+
       {/* Logo Area */}
-      <div style={logoContainerStyle}>
+      <div style={logoStyle}>
         {/* Pill Icon */}
         <div style={{
           width: 76,
@@ -332,20 +431,11 @@ export default function LoadingScreen({ onDone }) {
         </div>
       </div>
 
-      {/* Canvas Animation */}
-      <canvas ref={canvasRef} width={500} height={500} style={canvasStyle} />
-
       {/* Loading Bar Area */}
-      <div style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: "12px",
-        marginTop: "-10px",
-      }}>
+      <div style={barContainerStyle}>
         {/* Progress Track */}
         <div style={{
-          width: "320px",
+          width: "380px",
           height: "2px",
           backgroundColor: "rgba(255,255,255,0.08)",
           borderRadius: "9999px",
@@ -356,7 +446,7 @@ export default function LoadingScreen({ onDone }) {
             width: progressWidth,
             height: "100%",
             backgroundColor: "rgba(255,255,255,0.7)",
-            transition: "width 2200ms ease-in-out",
+            transition: "width 2000ms ease-in-out",
           }} />
         </div>
 
