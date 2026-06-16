@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import NewSections from "./components/NewSections";
+import LoadingScreen from "./components/LoadingScreen";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import About from "./pages/About";
@@ -192,6 +193,9 @@ function HeroCube() {
 }
 
 export default function App() {
+  const isHome = window.location.pathname === "/";
+  const alreadyLoaded = sessionStorage.getItem("nexix_loaded") === "true";
+  const [loading, setLoading] = useState(isHome && !alreadyLoaded);
   const [theme, setTheme] = useState(() => {
     try {
       return localStorage.getItem("nexix-theme") || "dark";
@@ -209,18 +213,35 @@ export default function App() {
   }, [theme]);
 
   return (
-    <BrowserRouter>
-      <div style={{
-        height:"100vh", width:"100vw",
-        background: isDark ? "#080808" : "#f5f5f5",
-        fontFamily:"'Inter', sans-serif",
-        color: isDark ? "#fff" : "#0a0a0a",
-        overflowY:"auto",
-        overflowX:"hidden",
-        display:"flex",
-        flexDirection:"column",
-        transition:"background 0.3s ease, color 0.3s ease",
-      }}>
+    <>
+      <style>{`
+        .site-reveal {
+          animation: site-reveal 800ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        @keyframes site-reveal {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      `}</style>
+      <BrowserRouter>
+        <div
+          className={loading ? "" : "site-reveal"}
+          style={{
+            height:"100vh", width:"100vw",
+            background: isDark ? "#080808" : "#f5f5f5",
+            fontFamily:"'Inter', sans-serif",
+            color: isDark ? "#fff" : "#0a0a0a",
+            overflowY:"auto",
+            overflowX:"hidden",
+            display:"flex",
+            flexDirection:"column",
+            transition:"background 0.3s ease, color 0.3s ease",
+          }}
+        >
+        {loading && <LoadingScreen onDone={() => {
+          sessionStorage.setItem("nexix_loaded", "true");
+          setLoading(false);
+        }} />}
         <Routes>
           {/* Home Route */}
           <Route path="/" element={
@@ -553,5 +574,6 @@ export default function App() {
         </Routes>
       </div>
     </BrowserRouter>
+  </>
   );
 }
