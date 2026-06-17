@@ -22,10 +22,10 @@ export default function Services() {
   const pricingTiers = [
     {
       name: "Starter",
-      price: "₹45,000",
+      price: "₹8000",
       desc: "Best for startups needing a fast, premium single-page landing presence.",
       features: [
-        "1 Custom Landing Page",
+        "Custom Landing Page",
         "100% Hand-coded React/Vite",
         "SEO Vitals Configurations",
         "Form integration",
@@ -34,14 +34,15 @@ export default function Services() {
     },
     {
       name: "Growth",
-      price: "₹85,000",
+      price: "₹12000",
       desc: "Perfect for growing brands requiring a complete multi-page web experience.",
       features: [
-        "5-8 Custom Responsive Pages",
+        "5-8 Custom Responsive 3D Pages",
         "Headless CMS Integration",
         "Structured Schema Metadata",
         "Google Search Console Setup",
-        "60 Days Post-Launch Support"
+        "60 Days Post-Launch Support",
+        "Admin Panel included"
       ]
     },
     {
