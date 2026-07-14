@@ -48,7 +48,7 @@ export default function About() {
   const defaultTeam = [
     {
       name: "Kabir Verma",
-      role: "Lead Developer & Founder",
+      role: "Developer",
       bio: "Focused on crafting clean React architectures, responsive layouts, and modern web applications.",
       initial: "KV"
     },
