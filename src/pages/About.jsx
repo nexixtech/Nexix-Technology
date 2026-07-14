@@ -162,10 +162,10 @@ export default function About() {
               <div className="w-20 h-20 rounded-full bg-[#0A0A0A] text-white font-display font-bold text-2xl flex items-center justify-center mb-6 shadow group-hover:bg-[#E0E0E0] group-hover:text-black transition-colors select-none">
                 ARG
               </div>
-              <h4 className="font-display font-bold text-xl text-[#0A0A0A] mb-1">Ayush Raj Gupta</h4>
+              <h4 className="font-display font-bold text-xl text-[#0A0A0A] mb-1">Aayush Raj Gupta</h4>
               <p className="font-mono text-xs text-[#0A0A0A] uppercase tracking-widest mb-4 font-semibold">Co-Founder</p>
               <p className="text-[#666666] text-xs leading-relaxed max-w-xs">
-                Ayush co-founded Nexix Technology with a focus on client relationships and creative strategy. He plays a key role in shaping the company's direction and ensuring every project delivers real value to clients.
+                Aayush co-founded Nexix Technology with a focus on client relationships and creative strategy. He plays a key role in shaping the company's direction and ensuring every project delivers real value to clients.
               </p>
             </div>
           </div>
